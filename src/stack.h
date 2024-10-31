@@ -144,6 +144,10 @@ public:
 //	  active_branch_ = 1;
 //  }
   const mpz_class getTotalModelCount() const {
+    // TODO : change to fit SSAT
+    // if not projection -> SSAT
+    // o.w. 維持原本的
+    // variable check projection or not / type of variable / probability of variable
     return branch_model_count_[0] + branch_model_count_[1];
   }
 };

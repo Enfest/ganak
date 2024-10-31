@@ -231,6 +231,8 @@ void Solver::solve(const string &file_name)
     if (perform_projected_counting) {
       statistics_.set_final_solution_count_projected(stack_.top().getTotalModelCount(), multiply_by_exp2);
     } else {
+      // TODO: get the branch variable and send the type and the probability of the variable into getTotalModelCount
+      // check if .getTotalModelCount() need to be changed in other place
       statistics_.set_final_solution_count(stack_.top().getTotalModelCount(), multiply_by_exp2);
     }
     statistics_.num_long_conflict_clauses_ = num_conflict_clauses();

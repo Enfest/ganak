@@ -362,6 +362,9 @@ bool Instance::createfromFile(const string &file_name) {
   literal_values_.clear();
   unit_clauses_.clear();
 
+  // TODO: add type and probability of each variable
+  // In Instance Class: add 2 function: 1. get type of variable 2. get probability of variable
+
   ifstream input_file(file_name);
   if (!input_file) {
     cerr << "Cannot open file: " << file_name << endl;
