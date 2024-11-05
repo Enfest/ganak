@@ -39,6 +39,20 @@ class StackLevel {
   unsigned unprocessed_components_end_ = 0;
 
   unsigned branch_variable_ = 0;
+
+  enum class VarType {
+    EXISTENTIAL,
+    PROBABILISTIC
+  };
+
+  VarType branch_var_type_ = VarType::EXISTENTIAL;
+  double probability_ = 0.5; // Default probability for probabilistic variables
+
+  void setBranchVarType(VarType type, double prob = 0.5) {
+    branch_var_type_ = type;
+    probability_ = prob;
+  }
+
 public:
 
   bool hasUnprocessedComponents() {
@@ -143,12 +157,26 @@ public:
 //	  branch_model_count_[0] = branch_model_count_[1] = 0;
 //	  active_branch_ = 1;
 //  }
-  const mpz_class getTotalModelCount() const {
-    // TODO : change to fit SSAT
-    // if not projection -> SSAT
-    // o.w. 維持原本的
-    // variable check projection or not / type of variable / probability of variable
-    return branch_model_count_[0] + branch_model_count_[1];
+  const mpz_class getTotalModelCountSSAT() const {
+    if (branch_var_type_ == VarType::EXISTENTIAL) {
+      // For existential variables, return maximum of both branches
+      return (branch_model_count_[0] > branch_model_count_[1]) ? 
+             branch_model_count_[0] : branch_model_count_[1];
+    } else {
+      // For probabilistic variables, return weighted sum
+      return mpz_class(branch_model_count_[0] * probability_ + 
+                      branch_model_count_[1] * (1.0 - probability_));
+    }
+  }
+
+  const mpz_class getTotalModelCount(float prob =-1, bool proj = true) const {
+    if(proj){
+      return branch_model_count_[0] + branch_model_count_[1];
+    }else if(prob<0){
+      return std::max(branch_model_count_[0], branch_model_count_[1]);
+    }else{
+      return branch_model_count_[1]*prob + branch_model_count_[0](1-prob);
+    }
   }
 };
 
