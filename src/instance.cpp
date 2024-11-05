@@ -430,9 +430,26 @@ bool Instance::createfromFile(const string &file_name) {
   literals_.resize(nVars + 1);
 
   unsigned clauses_in_file = 0;
+
+  isExist = vector<bool> (nVars + 1, false);
+  prob = vector<float> (nVars + 1, -1.0);
+
   while ((input_file >> c)) {
     parseProjection(pcnf, input_file, c);
 
+    //is exist variable
+    if(c == 'e'){
+      int x;
+      input_file >> x;
+      isExist[x] = true;
+    }
+    //is random variable
+    if(c == 'r'){
+      float p;
+      int x;
+      input_file >> p >> x;
+      prob[x] = p;
+    }
     //Parse clause
     if ((c == '-') || isdigit(c)) {
       clauses_in_file++;

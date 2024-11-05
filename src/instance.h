@@ -15,6 +15,15 @@
 #include <assert.h>
 
 class Instance {
+public:
+  vector<bool> isExist;
+  vector<float> prob;
+  bool isExistVariable(unsigned x){
+    return isExist[x];
+  }
+  float probability(unsigned x){
+    return prob[x];
+  }
 protected:
 
   void unSet(LiteralID lit) {
