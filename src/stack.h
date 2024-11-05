@@ -169,9 +169,14 @@ public:
     }
   }
 
-  const mpz_class getTotalModelCount() const {
-    
-    return branch_model_count_[0] + branch_model_count_[1];
+  const mpz_class getTotalModelCount(float prob =-1, bool proj = true) const {
+    if(proj){
+      return branch_model_count_[0] + branch_model_count_[1];
+    }else if(prob<0){
+      return std::max(branch_model_count_[0], branch_model_count_[1]);
+    }else{
+      return branch_model_count_[1]*prob + branch_model_count_[0](1-prob);
+    }
   }
 };
 

@@ -229,11 +229,13 @@ void Solver::solve(const string &file_name)
       exit(1);
     }
     if (perform_projected_counting) {
-      statistics_.set_final_solution_count_projected(stack_.top().getTotalModelCount(), multiply_by_exp2);
+      auto var = stack_.top().getbranchvar()
+      statistics_.set_final_solution_count_projected(stack_.top().getTotalModelCount(prob = var, proj = perform_projected_counting), multiply_by_exp2);
     } else {
       // TODO: get the branch variable and send the type and the probability of the variable into getTotalModelCount
       // check if .getTotalModelCount() need to be changed in other place
-      statistics_.set_final_solution_count(stack_.top().getTotalModelCount(), multiply_by_exp2);
+      auto var = stack_.top().getbranchvar()
+      statistics_.set_final_solution_count(stack_.top().getTotalModelCount(prob = var, proj = perform_projected_counting), multiply_by_exp2);
     }
     statistics_.num_long_conflict_clauses_ = num_conflict_clauses();
   } else {
@@ -531,7 +533,8 @@ retStateT Solver::backtrack() {
           }
           reactivateTOS();
           assert(stack_.size() >= 2);
-          (stack_.end() - 2)->includeSolution(stack_.top().getTotalModelCount());
+          auto var = stack_.top().getbranchvar()
+          (stack_.end() - 2)->includeSolution(stack_.top().getTotalModelCount(prob = var, proj = perform_projected_counting));
           stack_.pop_back();
           // step to the next component not yet processed
           stack_.top().nextUnprocessedComponent();
@@ -551,8 +554,9 @@ retStateT Solver::backtrack() {
         setLiteralIfFree(aLit.neg(), NOT_A_CLAUSE);
         return RESOLVED;
       }
+      auto var = stack_.top().getbranchvar()
       comp_manager_.cacheModelCountOf(stack_.top().super_component(),
-                                      stack_.top().getTotalModelCount());
+                                      stack_.top().getTotalModelCount(prob = var, proj = perform_projected_counting));
       if (config_.use_csvsads) {
         statistics_.numcachedec_++;
         if (statistics_.numcachedec_ % 128 == 0) {
@@ -565,7 +569,8 @@ retStateT Solver::backtrack() {
       }
       reactivateTOS();
       assert(stack_.size() >= 2);
-      (stack_.end() - 2)->includeSolution(stack_.top().getTotalModelCount());
+      auto var = stack_.top().getbranchvar()
+      (stack_.end() - 2)->includeSolution(stack_.top().getTotalModelCount(prob = var, proj = perform_projected_counting));
       stack_.pop_back();
       // step to the next component not yet processed
       stack_.top().nextUnprocessedComponent();
@@ -599,8 +604,9 @@ retStateT Solver::backtrack() {
         return RESOLVED;
       }
       // OTHERWISE:  backtrack further
+      auto var = stack_.top().getbranchvar()
       comp_manager_.cacheModelCountOf(stack_.top().super_component(),
-                                      stack_.top().getTotalModelCount());
+                                      stack_.top().getTotalModelCount(prob = var, proj = perform_projected_counting));
 
       //Cache score should be decreased since the component is getting added to cache
       if (config_.use_csvsads) {
@@ -617,7 +623,8 @@ retStateT Solver::backtrack() {
       reactivateTOS();
 
       assert(stack_.size() >= 2);
-      (stack_.end() - 2)->includeSolution(stack_.top().getTotalModelCount());
+      auto var = stack_.top().getbranchvar()
+      (stack_.end() - 2)->includeSolution(stack_.top().getTotalModelCount(prob = var, proj = perform_projected_counting));
       stack_.pop_back();
       // step to the next component not yet processed
       stack_.top().nextUnprocessedComponent();
