@@ -36,7 +36,7 @@ public:
 
   unsigned raw_data_byte_size() const {
         return data_size()* sizeof(unsigned)
-             + model_count_.get_mpz_t()->_mp_alloc * sizeof(mp_limb_t);
+             + sizeof(double);
   }
 
   bool equals(const SimpleUnpackedComponent &comp) const {

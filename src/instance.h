@@ -17,11 +17,11 @@
 class Instance {
 public:
   vector<bool> isExist;
-  vector<float> prob;
+  vector<double> prob;
   bool isExistVariable(unsigned x){
     return isExist[x];
   }
-  float probability(unsigned x){
+  double probability(unsigned x){
     return prob[x];
   }
 protected:

@@ -49,11 +49,11 @@ public:
   }
 
   unsigned raw_data_byte_size() const {
-    return data_size()* sizeof(unsigned) + model_count_.get_mpz_t()->_mp_alloc * sizeof(mp_limb_t);
+    return data_size()* sizeof(unsigned) + sizeof(double);
   }
 
   unsigned raw_data_byte_size_CLHASH() const {
-    return hack_* sizeof(uint64_t) + model_count_.get_mpz_t()->_mp_alloc * sizeof(mp_limb_t);
+    return hack_* sizeof(uint64_t) + sizeof(double);
   }
     // raw data size with the overhead
     // for the supposed 16byte alignment of malloc
@@ -66,7 +66,7 @@ public:
     {
       ds = data_size()* sizeof(unsigned);
     }
-    unsigned ms = model_count_.get_mpz_t()->_mp_alloc * sizeof(mp_limb_t);
+    unsigned ms = sizeof(double);
 //      unsigned mask = 0xfffffff8;
 //      return (ds & mask) + ((ds & 7)?8:0)
 //            +(ms & mask) + ((ms & 7)?8:0);

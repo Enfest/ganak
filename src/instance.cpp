@@ -432,26 +432,35 @@ bool Instance::createfromFile(const string &file_name) {
   unsigned clauses_in_file = 0;
 
   isExist = vector<bool> (nVars + 1, false);
-  prob = vector<float> (nVars + 1, -1.0);
+  prob = vector<double> (nVars + 1, -1);
 
   while ((input_file >> c)) {
-    parseProjection(pcnf, input_file, c);
-
+    // parseProjection(pcnf, input_file, c);
+    cout << "TEST! in parse file: " << c << endl;
     //is exist variable
     if(c == 'e'){
       int x;
       input_file >> x;
-      isExist[x] = true;
+      while(x != 0){
+        isExist[x] = true;
+        input_file >> x;
+      }
+      
     }
     //is random variable
-    if(c == 'r'){
-      float p;
+    else if(c == 'r'){
+      double p;
       int x;
       input_file >> p >> x;
-      prob[x] = p;
+      while(x != 0){
+        prob[x] = p;
+        input_file >> x;
+      }
     }
+    
     //Parse clause
-    if ((c == '-') || isdigit(c)) {
+    else if ((c == '-') || isdigit(c)) {
+      cout << "TEST! in parse file" << endl;
       clauses_in_file++;
       input_file.unget(); //extracted a nonspace character to determine if we have a clause, so put it back
       literals.clear();

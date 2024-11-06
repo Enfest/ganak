@@ -146,20 +146,19 @@ public:
     return creation_time_;
   }
 
-  const mpz_class &model_count() const {
+  const double & model_count() const {
     return model_count_;
   }
 
   unsigned alloc_of_model_count() const{
-        return sizeof(mpz_class)
-               + model_count_.get_mpz_t()->_mp_alloc * sizeof(mp_limb_t);
+        return sizeof(double);
   }
 
   void set_creation_time(unsigned time) {
     creation_time_ = time;
   }
 
-  void set_model_count(const mpz_class &rn, unsigned time) {
+  void set_model_count(const double &rn, unsigned time) {
     model_count_ = rn;
     length_solution_period_and_flags_ = (time - creation_time_) | (length_solution_period_and_flags_ & 1);
   }
@@ -212,7 +211,7 @@ protected:
   // vector <uint64_t> clhash_key_;
   unsigned hashkey_ = 0;
 
-  mpz_class model_count_;
+  double model_count_;
 
   unsigned creation_time_ = 1;
   unsigned hack_ = 0;

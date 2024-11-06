@@ -48,7 +48,7 @@ public:
     return ana_.scoreOf(v);
   }
 
-  void cacheModelCountOf(unsigned stack_comp_id, const mpz_class &value)
+  void cacheModelCountOf(unsigned stack_comp_id, const double &value)
   {
     if (config_.perform_component_caching)
       cache_.storeValueOf(component_stack_[stack_comp_id]->id(), value);
@@ -173,7 +173,7 @@ bool ComponentManager::findNextRemainingComponentOf(StackLevel &top)
     return true;
   // if no component remains
   // make sure, at least that the current branch is considered SAT
-  top.includeSolution(1);
+  top.includeSolution(1); // this is a model count prob = 1
   return false;
 }
 

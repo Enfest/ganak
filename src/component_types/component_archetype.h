@@ -42,6 +42,7 @@ typedef unsigned char CA_SearchState;
 
 #define   CA_CL_MASK  120
 
+class MStackLevel;
 class StackLevel;
 
 class ComponentArchetype {
@@ -182,6 +183,8 @@ public:
     current_comp_for_caching_.closeClauseData();
     return p_new_comp;
   }
+
+
 //  Component *makeComponentFromState(unsigned stack_size) {
 //      Component *p_new_comp = new Component();
 //      p_new_comp->reserveSpace(stack_size, super_comp().numLongClauses());
