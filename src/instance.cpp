@@ -269,6 +269,9 @@ void Instance::parseProjection(bool pcnf, ifstream& input_file, char& c) {
   string idstring;
   int lit;
   char eolchar;
+  if (!pcnf){
+    return;
+  }
 
   //Parse new projection
   if (c == 'v') {
@@ -434,15 +437,18 @@ bool Instance::createfromFile(const string &file_name) {
   isExist = vector<bool> (nVars + 1, false);
   prob = vector<double> (nVars + 1, -1);
 
+  vector<double> prob_init(nVars + 1, -1);
+  vector<bool> isExist_init(nVars + 1, false);
+
   while ((input_file >> c)) {
-    // parseProjection(pcnf, input_file, c);
-    cout << "TEST! in parse file: " << c << endl;
+    parseProjection(pcnf, input_file, c);
+    // cout << "TEST! in parse file: " << c << endl;
     //is exist variable
     if(c == 'e'){
       int x;
       input_file >> x;
       while(x != 0){
-        isExist[x] = true;
+        isExist_init[x] = true;
         input_file >> x;
       }
       
@@ -453,7 +459,7 @@ bool Instance::createfromFile(const string &file_name) {
       int x;
       input_file >> p >> x;
       while(x != 0){
-        prob[x] = p;
+        prob_init[x] = p;
         input_file >> x;
       }
     }
@@ -483,6 +489,9 @@ bool Instance::createfromFile(const string &file_name) {
         }
         if (!duplicate_literal) {
           literals.push_back(lit);
+          int position = literals.size() - 1;
+          isExist[position] = isExist_init[abs(lit)];
+          prob[position] = prob_init[abs(lit)];
         }
       }
 

@@ -8,7 +8,9 @@
 #ifndef STACK_H_
 #define STACK_H_
 
+#include <atomic>
 #include <gmpxx.h>
+#include <iostream>
 
 class StackLevel {
   /// active Component, once initialized, it should not change
@@ -171,7 +173,9 @@ public:
     }
   }
 
-  const double getTotalModelCount(float prob =-1, bool proj = true) const {
+  const double getTotalModelCount(double prob =-1, bool proj = true) const {
+    std::cout << "getTotalModelCount: " << branch_model_count_[0] << "/" << branch_model_count_[1] << std::endl;
+    std::cout << "prob: " << prob << "proj: " << proj << std::endl;
     if(proj){
       return branch_model_count_[0] + branch_model_count_[1];
     }else if(prob<0){

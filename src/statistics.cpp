@@ -129,7 +129,7 @@ void DataAndStatistics::printShort(const bool pmc) {
       << "/" << getAvgCacheHitSize() << endl;
   cout << "c " << endl;
   cout << "c " << endl;
-  if (final_solution_count_ == 0) {
+  if (final_solution_count_ < 0) {
     cout << "s UNSATISFIABLE " << endl;
   } else {
     cout << "s SATISFIABLE " << endl;
