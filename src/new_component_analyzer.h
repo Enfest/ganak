@@ -87,7 +87,7 @@ public:
   }
 
   // returns true, iff the component found is non-trivial
-  bool exploreRemainingCompOf(VariableIndex v) {
+  bool exploreRemainingCompOf(VariableIndex v, bool isExist, double prob) {
     assert(archetype_.var_unseen_in_sup_comp(v));
     recordComponentOf(v);
 

@@ -101,7 +101,7 @@ public:
       } else {
         if(isExist){
           archetype_.stack_level().includeSolution(2);}else{
-            archetype_.stack_level().includeSolution(prob);
+            archetype_.stack_level().includeSolution(1);
             std::cout<<"prob"<<prob<<"index"<<v<<"\n";
           } //hjko1107
       }

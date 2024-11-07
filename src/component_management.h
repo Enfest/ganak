@@ -188,6 +188,7 @@ bool ComponentManager::findNextRemainingComponentOf(StackLevel &top)
     top.includeSolution(1);}
   else{
     auto prob =probability_(top.getbranchvar());
+    std::cout<<"var"<<top.getbranchvar()<<"prob"<<prob<<'\n';
     if(top.isSecondBranch()){top.includeSolution(prob);}
     else{top.includeSolution(1-prob);}} // this is a model count prob = 1
   return false;

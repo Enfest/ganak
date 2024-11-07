@@ -164,8 +164,9 @@ public:
 
 
   const double getTotalModelCount(double prob =-1, bool proj = true) const {
-    std::cout << "getTotalModelCount: " << branch_model_count_[0] << "/" << branch_model_count_[1] << std::endl;
-    std::cout << "prob: " << prob << "proj: " << proj << std::endl;
+
+    std::cout  <<"getTotalModelCount: " << branch_model_count_[0] << "/" << branch_model_count_[1] << std::endl;
+    std::cout <<"var"<<active_branch_<<branch_variable_<< "prob: " << prob << std::endl;
     if(proj){
       return branch_model_count_[0] + branch_model_count_[1];
     }else if(prob<0){

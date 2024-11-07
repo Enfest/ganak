@@ -448,7 +448,7 @@ bool Instance::createfromFile(const string &file_name) {
       int x;
       input_file >> x;
       while(x != 0){
-        isExist_init[x] = true;
+        isExist[x] = true;
         input_file >> x;
       }
       
@@ -459,7 +459,7 @@ bool Instance::createfromFile(const string &file_name) {
       int x;
       input_file >> p >> x;
       while(x != 0){
-        prob_init[x] = p;
+        prob[x] = p;
         input_file >> x;
       }
     }
@@ -489,9 +489,9 @@ bool Instance::createfromFile(const string &file_name) {
         }
         if (!duplicate_literal) {
           literals.push_back(lit);
-          int position = literals.size() - 1;
-          isExist[position] = isExist_init[abs(lit)];
-          prob[position] = prob_init[abs(lit)];
+          // int position = literals.size() - 1;
+          // isExist[position] = isExist_init[abs(lit)];
+          // prob[position] = prob_init[abs(lit)];
         }
       }
 

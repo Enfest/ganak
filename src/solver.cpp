@@ -537,6 +537,7 @@ retStateT Solver::backtrack() {
           reactivateTOS();
           assert(stack_.size() >= 2);
           auto var = stack_.top().getbranchvar();
+          std::cout<<540<<var<<'\n';
           (stack_.end() - 2)->includeSolution(stack_.top().getTotalModelCount(prob[var], perform_projected_counting));
           stack_.pop_back();
           // step to the next component not yet processed
@@ -558,6 +559,7 @@ retStateT Solver::backtrack() {
         return RESOLVED;
       }
       auto var = stack_.top().getbranchvar();
+      std::cout<<562<<var<<'\n';
       comp_manager_.cacheModelCountOf(stack_.top().super_component(),
                                       stack_.top().getTotalModelCount(prob[var], perform_projected_counting));
       if (config_.use_csvsads) {
@@ -573,6 +575,7 @@ retStateT Solver::backtrack() {
       reactivateTOS();
       assert(stack_.size() >= 2);
       var = stack_.top().getbranchvar();
+      std::cout <<576<< var<<'\n';
       (stack_.end() - 2)->includeSolution(stack_.top().getTotalModelCount(prob[var], perform_projected_counting));
       stack_.pop_back();
       // step to the next component not yet processed
@@ -608,6 +611,7 @@ retStateT Solver::backtrack() {
       }
       // OTHERWISE:  backtrack further
       auto var = stack_.top().getbranchvar();
+      std::cout<<614<<var<<'\n';
       comp_manager_.cacheModelCountOf(stack_.top().super_component(),
                                       stack_.top().getTotalModelCount(prob[var], perform_projected_counting));
 
@@ -627,8 +631,10 @@ retStateT Solver::backtrack() {
 
       assert(stack_.size() >= 2);
       var = stack_.top().getbranchvar();
+      std::cout<<630<<var<<'\n';
       (stack_.end() - 2)->includeSolution(stack_.top().getTotalModelCount(prob[var], perform_projected_counting));
       stack_.pop_back();
+      
       // step to the next component not yet processed
       stack_.top().nextUnprocessedComponent();
 

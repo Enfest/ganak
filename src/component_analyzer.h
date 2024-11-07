@@ -90,6 +90,7 @@ public:
 
     if (search_stack_.size() == 1) {
       archetype_.stack_level().includeSolution(2);
+
       archetype_.setVar_in_other_comp(v);
       return false;
     }
