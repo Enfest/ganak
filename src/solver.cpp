@@ -63,12 +63,18 @@ bool Solver::simplePreProcess()
   //begin process unit clauses
   for (auto lit : unit_clauses_)
   {
+    std::cout << "pre process: " << lit.var() << "/sign:" << lit.sign() << std::endl;
     if (isUnitClause(lit.neg()))
     {
       return false;
     }
+    if(!isExist[lit.var()]){
+
+      pre_prob *= (lit.sign()? prob[lit.var()]:1-prob[lit.var()]);
+    }
     setLiteralIfFree(lit);
   }
+  std::cout << "Unit Clause Prob: " << pre_prob << std::endl;
   //end process unit clauses
 
   bool succeeded = BCP(start_ofs);
@@ -232,13 +238,18 @@ void Solver::solve(const string &file_name)
     }
     if (perform_projected_counting) {
       auto var = stack_.top().getbranchvar();
+      cout << "main solver: " << endl;
+      cout << "var: " << var << endl;
       statistics_.set_final_solution_count_projected(stack_.top().getTotalModelCount(prob[var], perform_projected_counting), multiply_by_exp2);
     } else {
       // TODO: get the branch variable and send the type and the probability of the variable into getTotalModelCount
       // check if .getTotalModelCount() need to be changed in other place
       auto var = stack_.top().getbranchvar();
-      // cout << "var: " << var << stack_.top().getTotalModelCount(prob[var], perform_projected_counting) << endl;
+      cout << "main solver: " << endl;
+      cout << "var: " << var << endl;
       statistics_.set_final_solution_count(stack_.top().getTotalModelCount(prob[var], perform_projected_counting), multiply_by_exp2);
+      statistics_.consider_unit_var_prob(pre_prob);
+
     }
     statistics_.num_long_conflict_clauses_ = num_conflict_clauses();
   } else {
@@ -265,7 +276,7 @@ void Solver::solve(const string &file_name)
 SOLVER_StateT Solver::countSAT() {
   retStateT state = RESOLVED;
 
-  while (true) {
+  while (true) { // stack: first in first out
     while (comp_manager_.findNextRemainingComponentOf(stack_.top())) {
       unsigned t = statistics_.num_cache_look_ups_ + 1;
       if (2 * log2(t) > log2(config_.delta) + 64 * config_.hashrange * 0.9843) { // 1 - log_2(2.004)/64 = 0.9843
@@ -317,8 +328,7 @@ void Solver::decideLiteral() {
   unsigned max_score_var = *it;
   float max_score = scoreOf(*(it));
   float score;
-  if (perform_projected_counting)
-  {
+  if (perform_projected_counting){
     isindependent = true;
     bool isindependent_support_present = false;
     while (*it != varsSENTINEL &&
@@ -537,6 +547,7 @@ retStateT Solver::backtrack() {
           reactivateTOS();
           assert(stack_.size() >= 2);
           auto var = stack_.top().getbranchvar();
+          cout << "var: " << var << endl;
           (stack_.end() - 2)->includeSolution(stack_.top().getTotalModelCount(prob[var], perform_projected_counting));
           stack_.pop_back();
           // step to the next component not yet processed
@@ -558,6 +569,7 @@ retStateT Solver::backtrack() {
         return RESOLVED;
       }
       auto var = stack_.top().getbranchvar();
+      cout << "var: " << var << endl;
       comp_manager_.cacheModelCountOf(stack_.top().super_component(),
                                       stack_.top().getTotalModelCount(prob[var], perform_projected_counting));
       if (config_.use_csvsads) {
@@ -573,6 +585,7 @@ retStateT Solver::backtrack() {
       reactivateTOS();
       assert(stack_.size() >= 2);
       var = stack_.top().getbranchvar();
+      cout << "var: " << var << endl;
       (stack_.end() - 2)->includeSolution(stack_.top().getTotalModelCount(prob[var], perform_projected_counting));
       stack_.pop_back();
       // step to the next component not yet processed
@@ -608,6 +621,7 @@ retStateT Solver::backtrack() {
       }
       // OTHERWISE:  backtrack further
       auto var = stack_.top().getbranchvar();
+      cout << "var: " << var << endl;
       comp_manager_.cacheModelCountOf(stack_.top().super_component(),
                                       stack_.top().getTotalModelCount(prob[var], perform_projected_counting));
 
@@ -627,6 +641,7 @@ retStateT Solver::backtrack() {
 
       assert(stack_.size() >= 2);
       var = stack_.top().getbranchvar();
+      cout << "var: " << var << endl;
       (stack_.end() - 2)->includeSolution(stack_.top().getTotalModelCount(prob[var], perform_projected_counting));
       stack_.pop_back();
       // step to the next component not yet processed

@@ -99,7 +99,7 @@ public:
       if (independent_support_.count(v) == 0 && perform_projected_model_count_) {
         archetype_.stack_level().includeSolution(1);
       } else {
-        archetype_.stack_level().includeSolution(2);
+        archetype_.stack_level().includeSolution(1); // ssat -> solution = 2 (SAT) -> prob = 1
       }
       archetype_.setVar_in_other_comp(v);
       return false;

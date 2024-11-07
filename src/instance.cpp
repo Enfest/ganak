@@ -448,7 +448,7 @@ bool Instance::createfromFile(const string &file_name) {
       int x;
       input_file >> x;
       while(x != 0){
-        isExist_init[x] = true;
+        isExist[x] = true;
         input_file >> x;
       }
       
@@ -459,14 +459,14 @@ bool Instance::createfromFile(const string &file_name) {
       int x;
       input_file >> p >> x;
       while(x != 0){
-        prob_init[x] = p;
+        prob[x] = p;
         input_file >> x;
       }
     }
     
     //Parse clause
     else if ((c == '-') || isdigit(c)) {
-      cout << "TEST! in parse file" << endl;
+      // cout << "TEST! in parse file" << endl;
       clauses_in_file++;
       input_file.unget(); //extracted a nonspace character to determine if we have a clause, so put it back
       literals.clear();
@@ -489,9 +489,10 @@ bool Instance::createfromFile(const string &file_name) {
         }
         if (!duplicate_literal) {
           literals.push_back(lit);
-          int position = literals.size() - 1;
-          isExist[position] = isExist_init[abs(lit)];
-          prob[position] = prob_init[abs(lit)];
+          // int position = literals.size() - 1;
+          // std::cout << "var mapping: " << lit << " -> " << position << "/" << literals.size() << std::endl;
+          // isExist[position] = isExist_init[abs(lit)];
+          // prob[position] = prob_init[abs(lit)];
         }
       }
 

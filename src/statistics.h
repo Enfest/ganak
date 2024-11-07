@@ -189,6 +189,10 @@ public:
     final_solution_count_ = count;
   }
 
+  void consider_unit_var_prob(double pre_prob){
+    final_solution_count_ *= pre_prob;
+  }
+
   const double &final_solution_count() const {
     return final_solution_count_;
   }

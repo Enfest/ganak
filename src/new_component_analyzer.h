@@ -92,7 +92,7 @@ public:
     recordComponentOf(v);
 
     if (search_stack_.size() == 1) {
-      archetype_.stack_level().includeSolution(1);
+      archetype_.stack_level().includeSolution(1); // SSAT -> 2 for SAT counting meaning that both SAT and UNSAT are solutions -> prob = 1
       archetype_.setVar_in_other_comp(v);
       return false;
     }

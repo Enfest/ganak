@@ -18,6 +18,7 @@ class Instance {
 public:
   vector<bool> isExist;
   vector<double> prob;
+  double pre_prob = 1;
   bool isExistVariable(unsigned x){
     return isExist[x];
   }

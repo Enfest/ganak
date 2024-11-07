@@ -171,7 +171,7 @@ bool ComponentManager::findNextRemainingComponentOf(StackLevel &top)
   assert(!top.branch_found_unsat());
   if (top.hasUnprocessedComponents())
     return true;
-  // if no component remains
+  // if no component remains -> meaning that no matter what the value of this variable is -> it will be satisfied -> prob = 1
   // make sure, at least that the current branch is considered SAT
   top.includeSolution(1); // this is a model count prob = 1
   return false;
