@@ -184,7 +184,12 @@ bool ComponentManager::findNextRemainingComponentOf(StackLevel &top)
     return true;
   // if no component remains
   // make sure, at least that the current branch is considered SAT
-  top.includeSolution(1); // this is a model count prob = 1
+  if(isExistVariable_(top.getbranchvar())){
+    top.includeSolution(1);}
+  else{
+    auto prob =probability_(top.getbranchvar());
+    if(top.isSecondBranch()){top.includeSolution(prob);}
+    else{top.includeSolution(1-prob);}} // this is a model count prob = 1
   return false;
 }
 
