@@ -91,7 +91,7 @@ public:
   }
 
   // returns true, iff the component found is non-trivial
-  bool exploreRemainingCompOf(VariableIndex v) {
+  bool exploreRemainingCompOf(VariableIndex v, bool isExist, double prob) {
     assert(archetype_.var_unseen_in_sup_comp(v));
     recordComponentOf(v);
 
@@ -99,7 +99,11 @@ public:
       if (independent_support_.count(v) == 0 && perform_projected_model_count_) {
         archetype_.stack_level().includeSolution(1);
       } else {
-        archetype_.stack_level().includeSolution(2);
+        if(isExist){
+          archetype_.stack_level().includeSolution(2);}else{
+            archetype_.stack_level().includeSolution(prob);
+            std::cout<<"prob"<<prob<<"index"<<v<<"\n";
+          } //hjko1107
       }
       archetype_.setVar_in_other_comp(v);
       return false;

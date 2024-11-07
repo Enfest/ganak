@@ -14,6 +14,7 @@
 //#include "component_analyzer.h"
 
 // #include <vector>
+#include <functional>
 #include <unordered_map>
 #include <random>
 #include <gmpxx.h>
@@ -26,6 +27,7 @@
 #endif
 #include "solver_config.h"
 
+
 using namespace std;
 
 typedef AltComponentAnalyzer ComponentAnalyzer;
@@ -33,10 +35,17 @@ typedef AltComponentAnalyzer ComponentAnalyzer;
 class ComponentManager
 {
 public:
+  // Define callback function types
+  using IsExistVariableCallback = std::function<bool(unsigned)>;
+  using ProbabilityCallback = std::function<double(unsigned)>;
+
   ComponentManager(SolverConfiguration &config, DataAndStatistics &statistics,
                    LiteralIndexedVector<TriValue> &lit_values,
-                   set<unsigned> &independent_support_, bool &perform_projected_model_counting) : config_(config), statistics_(statistics), cache_(statistics, config_),
-                                                                                                  ana_(statistics, lit_values, independent_support_, perform_projected_model_counting)
+                   set<unsigned> &independent_support_, bool &perform_projected_model_counting,
+                   IsExistVariableCallback isExistVariableCB, ProbabilityCallback probabilityCB) : config_(config), statistics_(statistics), cache_(statistics, config_),
+                                                                  ana_(statistics, lit_values, independent_support_, perform_projected_model_counting),
+                                                                  isExistVariable_(isExistVariableCB),
+                                                                  probability_(probabilityCB)
   {
   }
 
@@ -128,6 +137,8 @@ private:
   ComponentCache cache_;
   ComponentAnalyzer ana_;
   vector<float> cachescore_;
+  IsExistVariableCallback isExistVariable_;
+  ProbabilityCallback probability_;
 };
 
 float ComponentManager::cacheScoreOf(VariableIndex v)
@@ -186,7 +197,7 @@ void ComponentManager::recordRemainingCompsFor(StackLevel &top)
 
   for (auto vt = super_comp.varsBegin(); *vt != varsSENTINEL; vt++)
   {
-    if (ana_.isUnseenAndActive(*vt) && ana_.exploreRemainingCompOf(*vt))
+    if (ana_.isUnseenAndActive(*vt) && ana_.exploreRemainingCompOf(*vt, isExistVariable_(*vt), probability_(*vt))) //hjko1107
     {
 
       Component *p_new_comp = ana_.makeComponentFromArcheType();
