@@ -169,5 +169,11 @@ int main(int argc, char *argv[])
   cout << "c ganak GIT revision: " << Ganak::get_version_sha1() << endl;
   cout << "c ganak build env: " << Ganak::get_compilation_env() << endl;
   theSolver.solve(input_file);
+  for (unsigned i = 0; i < theSolver.isExist.size(); i++) {
+    cout << "c isExist[" << i << "]: " << theSolver.isExist[i] << endl;
+  }
+  for (unsigned i = 0; i < theSolver.prob.size(); i++) {
+    cout << "c probability[" << i << "]: " << theSolver.prob[i] << endl;
+  }
   return 0;
 }

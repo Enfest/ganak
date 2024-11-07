@@ -89,7 +89,8 @@ public:
     recordComponentOf(v);
 
     if (search_stack_.size() == 1) {
-      archetype_.stack_level().includeSolution(1); //ssat -> solution = 2 (SAT) -> prob = 1
+      archetype_.stack_level().includeSolution(2);
+
       archetype_.setVar_in_other_comp(v);
       return false;
     }

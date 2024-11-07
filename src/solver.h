@@ -123,10 +123,15 @@ private:
 
   StopWatch stopwatch_;
 
-  ComponentManager comp_manager_ = ComponentManager(config_,
-                                                    statistics_, literal_values_,
-                                                    independent_support_,
-                                                    perform_projected_counting);
+  ComponentManager comp_manager_ = ComponentManager(
+    config_,
+    statistics_,
+    literal_values_,
+    independent_support_,
+    perform_projected_counting,
+    [this](unsigned x) { return this->isExistVariable(x); },
+    [this](unsigned x) { return this->probability(x); }
+  );
 
   // the last time conflict clauses have been deleted
   unsigned long last_ccl_deletion_time_ = 0;

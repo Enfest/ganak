@@ -644,6 +644,7 @@ retStateT Solver::backtrack() {
       cout << "var: " << var << endl;
       (stack_.end() - 2)->includeSolution(stack_.top().getTotalModelCount(prob[var], perform_projected_counting));
       stack_.pop_back();
+      
       // step to the next component not yet processed
       stack_.top().nextUnprocessedComponent();
 

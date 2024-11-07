@@ -161,21 +161,12 @@ public:
 //	  branch_model_count_[0] = branch_model_count_[1] = 0;
 //	  active_branch_ = 1;
 //  }
-  const double getTotalModelCountSSAT() const {
-    if (branch_var_type_ == VarType::EXISTENTIAL) {
-      // For existential variables, return maximum of both branches
-      return (branch_model_count_[0] > branch_model_count_[1]) ? 
-             branch_model_count_[0] : branch_model_count_[1];
-    } else {
-      // For probabilistic variables, return weighted sum
-      return (branch_model_count_[0] * probability_ + 
-                      branch_model_count_[1] * (1.0 - probability_));
-    }
-  }
+
 
   const double getTotalModelCount(double prob =-1, bool proj = true) const {
-    std::cout << "getTotalModelCount: " << branch_model_count_[0] << "/" << branch_model_count_[1] << std::endl;
-    std::cout << "prob: " << prob << "proj: " << proj << std::endl;
+
+    std::cout  <<"getTotalModelCount: " << branch_model_count_[0] << "/" << branch_model_count_[1] << std::endl;
+    std::cout <<"var"<<active_branch_<<branch_variable_<< "prob: " << prob << std::endl;
     if(proj){
       return branch_model_count_[0] + branch_model_count_[1];
     }else if(prob<0){
