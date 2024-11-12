@@ -240,6 +240,7 @@ private:
     // initialize the stack to contain at least level zero
     stack_.push_back(StackLevel(1, 0, 2));
     stack_.back().changeBranch();
+    stack_.back().includeSolution(1.0);
   }
 
   const LiteralID &TOS_decLit()

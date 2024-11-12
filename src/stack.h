@@ -22,8 +22,9 @@ class StackLevel {
   const unsigned literal_stack_ofs_ = 0;
 
   //  Solutioncount
-  double branch_model_count_[2] = {0,0};
-  
+  double branch_model_count_[2] = {0.0, 0.0}; // for ssat set the init to 1.0
+  double var_prob_ = 1;
+  bool exist_ = true;
 
   /// remaining Components
 
@@ -107,8 +108,20 @@ public:
     return (!branch_found_unsat()) && hasUnprocessedComponents();
   }
 
+  void printbranchvalue(){
+    std::cout << "var: " << getbranchvar() << " exist: " << exist_ << " prob: " << var_prob_ << " 0: " << branch_model_count_[0] << " 1: " << branch_model_count_[1] << std::endl;
+  }
+
   unsigned literal_stack_ofs() {
     return literal_stack_ofs_;
+  }
+
+  void setProb (double prob){
+    var_prob_ = prob;
+  }
+
+  void setExist(bool exist){
+    exist_ = exist;
   }
   // void includeSolution(const double solutions) {
   //   if (branch_found_unsat_[active_branch_]) {
@@ -125,7 +138,9 @@ public:
   // }
   void includeSolution(double solutions) {
     if (branch_found_unsat_[active_branch_]) {
-      assert(branch_model_count_[active_branch_] == 0);
+      // assert(branch_model_count_[active_branch_] == 0);
+      std::cout << "solutions: " << solutions << std::endl;
+      printbranchvalue();
       return;
     }
     if (solutions <= 0)
@@ -136,6 +151,7 @@ public:
       branch_model_count_[active_branch_] *= solutions;
 
   }
+  
 
   bool branch_found_unsat() {
     return branch_found_unsat_[active_branch_];
@@ -164,15 +180,27 @@ public:
 
 
   const double getTotalModelCount(double prob =-1, bool proj = true) const {
-
-    std::cout  <<"getTotalModelCount: " << branch_model_count_[0] << "/" << branch_model_count_[1] << std::endl;
-    std::cout <<"var"<<active_branch_<<branch_variable_<< "prob: " << prob << std::endl;
+    // std::cout << "prob: " << prob << std::endl;
+    // std::cout  <<"getTotalModelCount: " << branch_model_count_[0] << "/" << branch_model_count_[1] << std::endl;
+    // std::cout <<"var: " << branch_variable_ << " branch: " << active_branch_ << " prob: " << prob << std::endl;
+    // if(branch_variable_ == 0){
+    //   return branch_model_count_[1];
+    // }
+    // if(proj){
+    //   return branch_model_count_[0] + branch_model_count_[1];
+    // }else if(prob<0){
+    //   std::cout << "Return: "<<std::max(branch_model_count_[0], branch_model_count_[1])<<std::endl;
+    //   return std::max(branch_model_count_[0], branch_model_count_[1]);
+    // }else{
+    //   std::cout << "Return: "<<branch_model_count_[1]*prob + branch_model_count_[0]*(1-prob)<<std::endl;
+    //   return branch_model_count_[1]*prob + branch_model_count_[0]*(1-prob);
+    // }
     if(proj){
       return branch_model_count_[0] + branch_model_count_[1];
-    }else if(prob<0){
-      return std::max(branch_model_count_[0], branch_model_count_[1]);
+    }else if(exist_){
+      return std::max(branch_model_count_[0]*(1-branch_found_unsat_[0]), branch_model_count_[1]*(1-branch_found_unsat_[1]));
     }else{
-      return branch_model_count_[1]*prob + branch_model_count_[0]*(1-prob);
+      return branch_model_count_[1]*(1-branch_found_unsat_[1])*(1-var_prob_) + branch_model_count_[0]*(1-branch_found_unsat_[0])*(var_prob_);
     }
   }
 };

@@ -31,7 +31,7 @@ public:
   LiteralID(int lit) {
     
     value_ = (abs(lit) << 1) + (unsigned) (lit > 0);
-    std::cout << "LiteralID: " << lit << "->" << var() << std::endl;
+    // std::cout << "LiteralID: " << lit << "->" << var() << std::endl;
   }
 
   LiteralID(VariableIndex var, bool sign) {

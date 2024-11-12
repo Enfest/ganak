@@ -82,6 +82,7 @@ public:
 
      for (auto vt = super_comp.varsBegin(); *vt != varsSENTINEL; vt++)
        if (isActive(*vt)) {
+        // std::cout << "active var: " << *vt << "\n";
          archetype_.setVar_in_sup_comp_unseen(*vt);
          var_frequency_scores_[*vt] = 0;
        }
@@ -94,16 +95,27 @@ public:
   bool exploreRemainingCompOf(VariableIndex v, bool isExist, double prob) {
     assert(archetype_.var_unseen_in_sup_comp(v));
     recordComponentOf(v);
-
+    std::cout << "exploreRemainingCompOf: " << v << "/" << archetype_.stack_level().getbranchvar() << " exist: " << isExist << " prob: " << prob << "\n";
+    std::cout << "search stack: " << search_stack_.size() << "\n";
     if (search_stack_.size() == 1) {
       if (independent_support_.count(v) == 0 && perform_projected_model_count_) {
         archetype_.stack_level().includeSolution(1);
       } else {
         if(isExist){
-          archetype_.stack_level().includeSolution(2);}else{
+          archetype_.stack_level().includeSolution(1);
+        }
+        else{
+          if (archetype_.stack_level().isSecondBranch()){ // literal is positive
             archetype_.stack_level().includeSolution(1);
-            std::cout<<"prob"<<prob<<"index"<<v<<"\n";
-          } //hjko1107
+             std::cout<<"in explore remain prob: "<<prob<<" index: "<< v <<" branch: " << archetype_.stack_level().isSecondBranch() <<"\n";
+          }
+          else{ // literal is negative
+            archetype_.stack_level().includeSolution(1);
+            std::cout<<"in explore remain prob: "<<prob<<" index: "<< v <<" branch: " << archetype_.stack_level().isSecondBranch() <<"\n";
+          }
+          
+          
+        } //hjko1107
       }
       archetype_.setVar_in_other_comp(v);
       return false;
@@ -125,6 +137,17 @@ public:
 
   ComponentArchetype &getArchetype(){
     return archetype_;
+  }
+
+  bool isResolved(const LiteralID lit) {
+    return literal_values_[lit] == F_TRI;
+  }
+
+  bool isSatisfied(const LiteralID lit) {
+    return literal_values_[lit] == T_TRI;
+  }
+  bool isActive(const LiteralID lit) {
+      return literal_values_[lit] == X_TRI;
   }
 
 private:
@@ -163,16 +186,16 @@ private:
 
   vector<VariableIndex> search_stack_;
 
-  bool isResolved(const LiteralID lit) {
-    return literal_values_[lit] == F_TRI;
-  }
+  // bool isResolved(const LiteralID lit) {
+  //   return literal_values_[lit] == F_TRI;
+  // }
 
-  bool isSatisfied(const LiteralID lit) {
-    return literal_values_[lit] == T_TRI;
-  }
-  bool isActive(const LiteralID lit) {
-      return literal_values_[lit] == X_TRI;
-  }
+  // bool isSatisfied(const LiteralID lit) {
+  //   return literal_values_[lit] == T_TRI;
+  // }
+  // bool isActive(const LiteralID lit) {
+  //     return literal_values_[lit] == X_TRI;
+  // }
 
   bool isActive(const VariableIndex v) {
     return literal_values_[LiteralID(v, true)] == X_TRI;
@@ -181,6 +204,8 @@ private:
   unsigned *beginOfLinkList(VariableIndex v) {
     return &unified_variable_links_lists_pool_[variable_link_list_offsets_[v]];
   }
+
+  
 
   // stores all information about the component of var
   // in variables_seen_, clauses_seen_ and

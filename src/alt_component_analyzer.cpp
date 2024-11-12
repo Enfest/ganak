@@ -7,6 +7,7 @@
 
 
 #include "alt_component_analyzer.h"
+#include <iostream>
 
 
 
@@ -154,11 +155,14 @@ void AltComponentAnalyzer::initialize(LiteralIndexedVector<Literal> & literals,
 
 void AltComponentAnalyzer::recordComponentOf(const VariableIndex var) {
 
+  std::cout << "recordComponentOf search stack: " << search_stack_.size() << std::endl;
+
   search_stack_.clear();
   setSeenAndStoreInSearchStack(var);
-
+  
   for (auto vt = search_stack_.begin(); vt != search_stack_.end(); vt++) {
     //BEGIN traverse binary clauses
+    std::cout << *vt << std::endl;
     assert(isActive(*vt));
     unsigned *p = beginOfLinkList(*vt);
     for (; *p; p++) {
@@ -170,7 +174,7 @@ void AltComponentAnalyzer::recordComponentOf(const VariableIndex var) {
     //END traverse binary clauses
 
     for ( p++; *p ; p+=3) {
-      if(archetype_.clause_unseen_in_sup_comp(*p)){
+      if(archetype_.clause_unseen_in_sup_comp(*p)){ // p is clause index
         LiteralID litA = *reinterpret_cast<const LiteralID *>(p + 1);
         LiteralID litB = *(reinterpret_cast<const LiteralID *>(p + 1) + 1);
         if(isSatisfied(litA)|| isSatisfied(litB))
@@ -184,10 +188,14 @@ void AltComponentAnalyzer::recordComponentOf(const VariableIndex var) {
         }
       }
     }
+
     //END traverse ternary clauses
 
-    for (p++; *p ; p +=2)
+    for (p++; *p ; p +=2){
+      std::cout << "searchClause: " << "in" << std::endl;
       if(archetype_.clause_unseen_in_sup_comp(*p))
         searchClause(*vt,*p, reinterpret_cast<LiteralID *>(p + 1 + *(p+1)));
+    }
   }
-}
+  std::cout << "after recordComponentOf seen: " << search_stack_.size() << std::endl;
+};

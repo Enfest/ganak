@@ -435,7 +435,7 @@ bool Instance::createfromFile(const string &file_name) {
   unsigned clauses_in_file = 0;
 
   isExist = vector<bool> (nVars + 1, false);
-  prob = vector<double> (nVars + 1, -1);
+  prob = vector<double> (nVars + 1, 0);
 
   vector<double> prob_init(nVars + 1, -1);
   vector<bool> isExist_init(nVars + 1, false);
@@ -479,11 +479,11 @@ bool Instance::createfromFile(const string &file_name) {
         bool duplicate_literal = false;
         for (auto i : literals) {
           if (i.toInt() == lit) {
-            duplicate_literal = true;
+            duplicate_literal = true; // not need to consider the same clause twice in a clause
             break;
           }
           if (i.toInt() == -lit) {
-            skip_clause = true;
+            skip_clause = true; // exist both x and -x in a clause => always true
             break;
           }
         }

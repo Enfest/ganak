@@ -8,6 +8,7 @@
 #include <deque>
 
 #include <algorithm>
+#include <iostream>
 
 StopWatch::StopWatch()
 {
@@ -51,8 +52,7 @@ void Solver::print(vector<unsigned> &vec)
   cout << endl;
 }
 
-bool Solver::simplePreProcess()
-{
+bool Solver::simplePreProcess() { // after counting the unit prob, the stack will ne reinit => remember to add the solution to the new stack: branch = 1
 
   if (!config_.perform_pre_processing)
     return true;
@@ -69,21 +69,25 @@ bool Solver::simplePreProcess()
       return false;
     }
     if(!isExist[lit.var()]){
-
-      pre_prob *= (lit.sign()? prob[lit.var()]:1-prob[lit.var()]);
+      stack_.top().includeSolution(lit.sign()? prob[lit.var()]:1-prob[lit.var()]);
     }
     setLiteralIfFree(lit);
   }
-  std::cout << "Unit Clause Prob: " << pre_prob << std::endl;
+  std::cout << "stack size: " << stack_.size() << std::endl;
+  stack_.top().printbranchvalue();
+  std::cout << "Unit Clause Prob: " << stack_.top().getBranchSols() << std::endl;
   //end process unit clauses
+  double unit_prob = stack_.top().getBranchSols();
 
   bool succeeded = BCP(start_ofs);
 
   if (succeeded)
     succeeded &= prepFailedLiteralTest();
 
-  if (succeeded)
-    HardWireAndCompact();
+  if (succeeded){
+    HardWireAndCompact(); // reinit the stack
+    stack_.top().includeSolution(unit_prob);
+  }
 
   return succeeded;
 }
@@ -179,7 +183,7 @@ void Solver::solve(const string &file_name)
     comp_manager_.getrandomseedforclhash();
   }
 
-  initStack(num_variables());
+  initStack(num_variables()); // initialize the root
 
   if (!config_.quiet)
   {
@@ -188,7 +192,7 @@ void Solver::solve(const string &file_name)
   }
   if (!perform_projected_counting) {
       independent_support_.clear();
-      for(uint32_t i = 0; i < num_variables(); i++) independent_support_.insert(i);
+      for(uint32_t i = 0; i < num_variables(); i++) independent_support_.insert(i); // create a tree that insert all the literal into it.
   }
   if (!config_.quiet)
   {
@@ -208,7 +212,8 @@ void Solver::solve(const string &file_name)
   }
 
   if (notfoundUNSAT) {
-    notfoundUNSAT = simplePreProcess();
+    notfoundUNSAT = simplePreProcess(); // preprocess unit literals
+    // cout << "Preprocess stack prob: " << stack_.top().getBranchSols() << endl;
   }
 
   if (!config_.quiet) {
@@ -248,8 +253,6 @@ void Solver::solve(const string &file_name)
       cout << "main solver: " << endl;
       cout << "var: " << var << endl;
       statistics_.set_final_solution_count(stack_.top().getTotalModelCount(prob[var], perform_projected_counting), multiply_by_exp2);
-      statistics_.consider_unit_var_prob(pre_prob);
-
     }
     statistics_.num_long_conflict_clauses_ = num_conflict_clauses();
   } else {
@@ -275,7 +278,8 @@ void Solver::solve(const string &file_name)
 
 SOLVER_StateT Solver::countSAT() {
   retStateT state = RESOLVED;
-
+  cout << "Start countSSAT: stack size: " << stack_.size() << endl;
+  stack_.top().printbranchvalue();
   while (true) { // stack: first in first out
     while (comp_manager_.findNextRemainingComponentOf(stack_.top())) {
       unsigned t = statistics_.num_cache_look_ups_ + 1;
@@ -296,6 +300,7 @@ SOLVER_StateT Solver::countSAT() {
         break;
       }
     }
+    // cout << "after while loop: stack var: " << stack_.top().getbranchvar() << endl;
 
     state = backtrack();
     if (state == RESTART) {
@@ -323,7 +328,6 @@ void Solver::decideLiteral() {
     StackLevel(stack_.top().currentRemainingComponent(),
                literal_stack_.size(),
                comp_manager_.component_stack_size()));
-
   auto it = comp_manager_.superComponentOf(stack_.top()).varsBegin();
   unsigned max_score_var = *it;
   float max_score = scoreOf(*(it));
@@ -487,7 +491,11 @@ void Solver::decideLiteral() {
   }
   LiteralID theLit(max_score_var, polarity);
   stack_.top().setbranchvariable(max_score_var);
-
+  if(stack_.top().getbranchvar() > 0){
+    std::cout << "decide literal: " << stack_.top().getbranchvar() << " prob: " << prob[stack_.top().getbranchvar()] << " exist: " << isExist[stack_.top().getbranchvar()] << std::endl;
+    stack_.top().setProb(prob[stack_.top().getbranchvar()]);
+    stack_.top().setExist(isExist[stack_.top().getbranchvar()]);
+  }
   setLiteralIfFree(theLit);
   statistics_.num_decisions_++;
   if (config_.maxdecterminate) {
@@ -547,7 +555,8 @@ retStateT Solver::backtrack() {
           reactivateTOS();
           assert(stack_.size() >= 2);
           auto var = stack_.top().getbranchvar();
-          cout << "var: " << var << endl;
+          stack_.top().printbranchvalue();
+          cout << "1. var: " << var << " " << stack_.top().getTotalModelCount(prob[var], perform_projected_counting) <<  endl;
           (stack_.end() - 2)->includeSolution(stack_.top().getTotalModelCount(prob[var], perform_projected_counting));
           stack_.pop_back();
           // step to the next component not yet processed
@@ -569,7 +578,8 @@ retStateT Solver::backtrack() {
         return RESOLVED;
       }
       auto var = stack_.top().getbranchvar();
-      cout << "var: " << var << endl;
+      stack_.top().printbranchvalue();
+      cout << "2. var: " << var << " " << stack_.top().getTotalModelCount(prob[var], perform_projected_counting) <<  endl;
       comp_manager_.cacheModelCountOf(stack_.top().super_component(),
                                       stack_.top().getTotalModelCount(prob[var], perform_projected_counting));
       if (config_.use_csvsads) {
@@ -585,7 +595,8 @@ retStateT Solver::backtrack() {
       reactivateTOS();
       assert(stack_.size() >= 2);
       var = stack_.top().getbranchvar();
-      cout << "var: " << var << endl;
+      stack_.top().printbranchvalue();
+      cout << "3. var: " << var << " " << stack_.top().getTotalModelCount(prob[var], perform_projected_counting) <<  endl;
       (stack_.end() - 2)->includeSolution(stack_.top().getTotalModelCount(prob[var], perform_projected_counting));
       stack_.pop_back();
       // step to the next component not yet processed
@@ -621,7 +632,8 @@ retStateT Solver::backtrack() {
       }
       // OTHERWISE:  backtrack further
       auto var = stack_.top().getbranchvar();
-      cout << "var: " << var << endl;
+      stack_.top().printbranchvalue();
+      cout << "4. var: " << var << " " << stack_.top().getTotalModelCount(prob[var], perform_projected_counting) <<  endl;
       comp_manager_.cacheModelCountOf(stack_.top().super_component(),
                                       stack_.top().getTotalModelCount(prob[var], perform_projected_counting));
 
@@ -641,7 +653,8 @@ retStateT Solver::backtrack() {
 
       assert(stack_.size() >= 2);
       var = stack_.top().getbranchvar();
-      cout << "var: " << var << endl;
+      stack_.top().printbranchvalue();
+      cout << "5. var: " << var << " " << stack_.top().getTotalModelCount(prob[var], perform_projected_counting) <<  endl;
       (stack_.end() - 2)->includeSolution(stack_.top().getTotalModelCount(prob[var], perform_projected_counting));
       stack_.pop_back();
       

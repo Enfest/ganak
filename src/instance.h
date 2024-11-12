@@ -18,7 +18,6 @@ class Instance {
 public:
   vector<bool> isExist;
   vector<double> prob;
-  double pre_prob = 1;
   bool isExistVariable(unsigned x){
     return isExist[x];
   }
@@ -99,7 +98,7 @@ protected:
    */
   vector<LiteralID> literal_pool_;
 
-  set <unsigned> independent_support_;
+  set <unsigned> independent_support_; // a reb-black tree
   bool perform_projected_counting = false;
   long int multiply_by_exp2 = 0;
 
