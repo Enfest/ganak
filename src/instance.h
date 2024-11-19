@@ -107,7 +107,9 @@ protected:
   vector<Variable> variables_;
   LiteralIndexedVector<TriValue> literal_values_;
   
+  // SSAT FIXED
   vector<bool> isExist;
+  vector<char> quantifier_level;
 
   void decayActivities() {
     for (auto l_it = literals_.begin(); l_it != literals_.end(); l_it++)

@@ -157,9 +157,9 @@ src/CMakeFiles/ganak.dir/clean:
 # Target rules for target src/CMakeFiles/ganak-bin.dir
 
 # All Build rule for target.
-src/CMakeFiles/ganak-bin.dir/all: src/CMakeFiles/ganak.dir/all
 src/CMakeFiles/ganak-bin.dir/all: src/component_types/CMakeFiles/component_types.dir/all
 src/CMakeFiles/ganak-bin.dir/all: src/clhash/CMakeFiles/clhash.dir/all
+src/CMakeFiles/ganak-bin.dir/all: src/CMakeFiles/ganak.dir/all
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/ganak-bin.dir/build.make src/CMakeFiles/ganak-bin.dir/depend
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/ganak-bin.dir/build.make src/CMakeFiles/ganak-bin.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/enfest/SAT/ganak/build/CMakeFiles --progress-num=14,15 "Built target ganak-bin"

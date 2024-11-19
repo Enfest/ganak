@@ -1956,3 +1956,81 @@ events:
         
       exitCode: 0
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.27/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake-3.27/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/share/cmake-3.27/Modules/CheckCXXCompilerFlag.cmake:34 (cmake_check_compiler_flag)"
+      - "CMakeLists.txt:84 (check_cxx_compiler_flag)"
+      - "CMakeLists.txt:228 (add_cxx_flag_if_supported)"
+    checks:
+      - "Performing Test HAVE_FLAG_-mtune=native"
+    directories:
+      source: "/home/enfest/SAT/ganak/build/CMakeFiles/CMakeScratch/TryCompile-IBy7p1"
+      binary: "/home/enfest/SAT/ganak/build/CMakeFiles/CMakeScratch/TryCompile-IBy7p1"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: " -O2"
+      CMAKE_MODULE_PATH: "/home/enfest/SAT/ganak/cmake"
+    buildResult:
+      variable: "HAVE_FLAG_-mtune=native"
+      cached: true
+      stdout: |
+        Change Dir: '/home/enfest/SAT/ganak/build/CMakeFiles/CMakeScratch/TryCompile-IBy7p1'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_4fab9/fast
+        gmake[1]: Entering directory '/home/enfest/SAT/ganak/build/CMakeFiles/CMakeScratch/TryCompile-IBy7p1'
+        /usr/bin/gmake  -f CMakeFiles/cmTC_4fab9.dir/build.make CMakeFiles/cmTC_4fab9.dir/build
+        gmake[2]: Entering directory '/home/enfest/SAT/ganak/build/CMakeFiles/CMakeScratch/TryCompile-IBy7p1'
+        Building CXX object CMakeFiles/cmTC_4fab9.dir/src.cxx.o
+        /usr/bin/c++   -DHAVE_FLAG_-mtune=native -mtune=native -o CMakeFiles/cmTC_4fab9.dir/src.cxx.o -c /home/enfest/SAT/ganak/build/CMakeFiles/CMakeScratch/TryCompile-IBy7p1/src.cxx
+        <command-line>: warning: ISO C++11 requires whitespace after the macro name
+        Linking CXX executable cmTC_4fab9
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4fab9.dir/link.txt --verbose=1
+        /usr/bin/c++  -O2  -rdynamic CMakeFiles/cmTC_4fab9.dir/src.cxx.o -o cmTC_4fab9 
+        gmake[2]: Leaving directory '/home/enfest/SAT/ganak/build/CMakeFiles/CMakeScratch/TryCompile-IBy7p1'
+        gmake[1]: Leaving directory '/home/enfest/SAT/ganak/build/CMakeFiles/CMakeScratch/TryCompile-IBy7p1'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.27/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake-3.27/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/share/cmake-3.27/Modules/CheckCCompilerFlag.cmake:51 (cmake_check_compiler_flag)"
+      - "CMakeLists.txt:91 (check_c_compiler_flag)"
+      - "CMakeLists.txt:254 (add_c_flag_if_supported)"
+    checks:
+      - "Performing Test HAVE_FLAG_-std=c99"
+    directories:
+      source: "/home/enfest/SAT/ganak/build/CMakeFiles/CMakeScratch/TryCompile-qVEBso"
+      binary: "/home/enfest/SAT/ganak/build/CMakeFiles/CMakeScratch/TryCompile-qVEBso"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -fPIC"
+      CMAKE_EXE_LINKER_FLAGS: " -O2"
+      CMAKE_MODULE_PATH: "/home/enfest/SAT/ganak/cmake"
+    buildResult:
+      variable: "HAVE_FLAG_-std=c99"
+      cached: true
+      stdout: |
+        Change Dir: '/home/enfest/SAT/ganak/build/CMakeFiles/CMakeScratch/TryCompile-qVEBso'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_ee92a/fast
+        gmake[1]: Entering directory '/home/enfest/SAT/ganak/build/CMakeFiles/CMakeScratch/TryCompile-qVEBso'
+        /usr/bin/gmake  -f CMakeFiles/cmTC_ee92a.dir/build.make CMakeFiles/cmTC_ee92a.dir/build
+        gmake[2]: Entering directory '/home/enfest/SAT/ganak/build/CMakeFiles/CMakeScratch/TryCompile-qVEBso'
+        Building C object CMakeFiles/cmTC_ee92a.dir/src.c.o
+        /usr/bin/cc   -fPIC    -DHAVE_FLAG_-std=c99 -std=c99 -o CMakeFiles/cmTC_ee92a.dir/src.c.o -c /home/enfest/SAT/ganak/build/CMakeFiles/CMakeScratch/TryCompile-qVEBso/src.c
+        <command-line>: warning: ISO C99 requires whitespace after the macro name
+        Linking C executable cmTC_ee92a
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ee92a.dir/link.txt --verbose=1
+        /usr/bin/cc  -fPIC   -O2  -rdynamic CMakeFiles/cmTC_ee92a.dir/src.c.o -o cmTC_ee92a 
+        gmake[2]: Leaving directory '/home/enfest/SAT/ganak/build/CMakeFiles/CMakeScratch/TryCompile-qVEBso'
+        gmake[1]: Leaving directory '/home/enfest/SAT/ganak/build/CMakeFiles/CMakeScratch/TryCompile-qVEBso'
+        
+      exitCode: 0
+...

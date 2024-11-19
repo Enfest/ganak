@@ -312,6 +312,7 @@ void Solver::decideLiteral() {
 	unsigned max_score_var = *it;
 	float max_score = scoreOf(*(it));
 	float score;
+	int max_score_level = variables_[*it].get_quant_level();
 	if (config_.perform_projectedmodelcounting){
 		isindependent = true;
 		bool isindependent_support_present = false;
@@ -322,14 +323,21 @@ void Solver::decideLiteral() {
 			isindependent_support_present = true;
 			max_score_var = *it;
 			max_score = scoreOf(*it);
+			max_score_level = variables_[max_score_var].get_quant_level();
 		}
 		while (*it != varsSENTINEL) {
+			cout << *it << " " << variables_[*it].get_quant_level() << endl;
 			if(independent_support_.find(*it) != independent_support_.end()){
 				isindependent_support_present = true;
 				score = scoreOf(*it);
-				if (score > max_score) {
+				if (score > max_score && variables_[*it].get_quant_level() == max_score_level) {
 					max_score = score;
 					max_score_var = *it;
+				}
+				else if (variables_[*it].get_quant_level() < max_score_level) {
+					max_score = score;
+					max_score_var = *it;
+					max_score_level = variables_[max_score_var].get_quant_level();
 				}
 			}
 			it++;
@@ -340,12 +348,18 @@ void Solver::decideLiteral() {
 					 *it != varsSENTINEL; it++) {
 				if(independent_support_.find(*it) != independent_support_.end()){
 					score = scoreOf(*it);
-					if (score > max_score*config_.csvsads_param) {
+					if (score > max_score*config_.csvsads_param && variables_[*it].get_quant_level() == max_score_level) {
 						if (comp_manager_.cacheScoreOf(*it) > cachescore){
 							isindependent_support_present = true;
 							max_score_var = *it;
 							cachescore = comp_manager_.cacheScoreOf(*it);
 						}
+					}
+					else if (variables_[*it].get_quant_level() < max_score_level) {
+						// max_score = score;
+						max_score_var = *it;
+						max_score_level = variables_[max_score_var].get_quant_level();
+						cachescore = comp_manager_.cacheScoreOf(*it);
 					}
 				}
 			}
@@ -355,13 +369,20 @@ void Solver::decideLiteral() {
 			isindependent = false;
 			max_score = -1;
 			score = -1;
+			max_score_level = variables_.size();
+			cout << "Not independent" << endl;
 			for (auto it =
 				comp_manager_.superComponentOf(stack_.top()).varsBegin();
 				*it != varsSENTINEL; it++) {
 				score = scoreOf(*it);
-				if (score > max_score) {
+				if (score > max_score && variables_[*it].get_quant_level() == max_score_level) {
 					max_score = score;
 					max_score_var = *it;
+				}
+				else if (variables_[*it].get_quant_level() < max_score_level) {
+					max_score = score;
+					max_score_var = *it;
+					max_score_level = variables_[max_score_var].get_quant_level();
 				}
 			}
 			if (config_.use_csvsads){
@@ -369,9 +390,19 @@ void Solver::decideLiteral() {
 				for (auto it = comp_manager_.superComponentOf(stack_.top()).varsBegin();
 						*it != varsSENTINEL; it++) {
 					score = scoreOf(*it);
-					if (score > max_score*config_.csvsads_param) {
-						if (comp_manager_.cacheScoreOf(*it) > cachescore){
+					if(independent_support_.find(*it) != independent_support_.end()){
+						score = scoreOf(*it);
+						if (score > max_score*config_.csvsads_param && variables_[*it].get_quant_level() == max_score_level) {
+							if (comp_manager_.cacheScoreOf(*it) > cachescore){
+								isindependent_support_present = true;
+								max_score_var = *it;
+								cachescore = comp_manager_.cacheScoreOf(*it);
+							}
+						}
+						else if (variables_[*it].get_quant_level() < max_score_level) {
+							// max_score = score;
 							max_score_var = *it;
+							max_score_level = variables_[max_score_var].get_quant_level();
 							cachescore = comp_manager_.cacheScoreOf(*it);
 						}
 					}
@@ -412,9 +443,14 @@ void Solver::decideLiteral() {
 				comp_manager_.superComponentOf(stack_.top()).varsBegin();
 				*it != varsSENTINEL; it++) {
 			score = scoreOf(*it);
-			if (score > max_score) {
+			if (score > max_score && variables_[*it].get_quant_level() == max_score_level) {
 				max_score = score;
 				max_score_var = *it;
+			}
+			else if (variables_[*it].get_quant_level() < max_score_level) {
+				// max_score = score;
+				max_score_var = *it;
+				max_score_level = variables_[max_score_var].get_quant_level();
 			}
 		}
 		if (config_.use_csvsads){
@@ -423,15 +459,30 @@ void Solver::decideLiteral() {
 					*it != varsSENTINEL; it++) {
 				score = scoreOf(*it);
 				if (score > max_score*config_.csvsads_param) {
-					if (comp_manager_.cacheScoreOf(*it) > cachescore){
+					if (comp_manager_.cacheScoreOf(*it) > cachescore && variables_[*it].get_quant_level() == max_score_level){
 						max_score_var = *it;
 						cachescore = comp_manager_.cacheScoreOf(*it);
 					}
+					else if (variables_[*it].get_quant_level() < max_score_level) {
+						// max_score = score;
+						max_score_var = *it;
+						max_score_level = variables_[max_score_var].get_quant_level();
+						cachescore = comp_manager_.cacheScoreOf(*it);
+					}
+				}
+				else if (variables_[*it].get_quant_level() < max_score_level) {
+					// max_score = score;
+					max_score_var = *it;
+					max_score_level = variables_[max_score_var].get_quant_level();
+					cachescore = comp_manager_.cacheScoreOf(*it);
 				}
 			}
 			max_score = score;
 		}
 	}
+
+	// SSAT FIXED BEFORE THIS to handle quantifier level
+
 	// this assert should always hold,
 	// if not then there is a bug in the logic of countSAT();
 	assert(max_score_var != 0);
@@ -475,6 +526,7 @@ void Solver::decideLiteral() {
 		break;
 	}
 	LiteralID theLit(max_score_var, polarity);
+	cout << "Deciding on: " << theLit.toInt() << " with sign " << theLit.sign() << " " << max_score_level << endl;
 	stack_.top().setbranchvariable(max_score_var);
 	stack_.top().setExist(isExist[max_score_var]);
 

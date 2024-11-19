@@ -181,6 +181,7 @@ struct Variable {
   int decision_level = INVALID_DL;
   bool polarity = false;
   bool set = false;
+  int quant_level = 0;
 
   public:
     void assign_weight(const mpf_class &weight, const bool lit_sign, const int index) {
@@ -222,7 +223,13 @@ struct Variable {
       } else {
         return neg_weight_;
       }
-  }
+    }
+    int get_quant_level() const {
+      return quant_level;
+    }
+    void set_quant_level(int _quant_level) {
+      quant_level = _quant_level;
+    }
 };
 
 // for now Clause Header is just a dummy
