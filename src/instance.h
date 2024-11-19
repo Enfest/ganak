@@ -106,6 +106,8 @@ protected:
 
   vector<Variable> variables_;
   LiteralIndexedVector<TriValue> literal_values_;
+  
+  vector<bool> isExist;
 
   void decayActivities() {
     for (auto l_it = literals_.begin(); l_it != literals_.end(); l_it++)

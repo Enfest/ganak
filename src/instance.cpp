@@ -295,21 +295,44 @@ void Instance::parseWeights(ifstream& input_file, char& c) {
   int literal;
   mpf_class weight;
   int delimiter;
-  if (c == 'w') {
-    input_file >> literal;
+  if (c == 'r') {
     input_file >> weight;
-    char eofchar;
-    input_file.get(eofchar);
-    if (eofchar == '\n') {
-      input_file.unget();
-      cout << "c invalid weight format" << endl; 
-    } else {
-      input_file.unget();
-      input_file >> delimiter;
-      assert(delimiter == 0);
+    input_file >> literal;
+    while (literal != 0) {
+      const unsigned index = literal < 0 ? -1 * literal : literal;
+      variables_[index].assign_weight(weight, true, index);
+      variables_[index].assign_weight(1-weight, false, index);
+      input_file >> literal;
     }
-    const unsigned index = literal < 0 ? -1 * literal : literal;
-    variables_[index].assign_weight(weight, literal > 0, index);
+    // char eofchar;
+    // input_file.get(eofchar);
+    // if (eofchar == '\n') {
+    //   input_file.unget();
+    //   cout << "c invalid weight format" << endl; 
+    // } else {
+    //   input_file.unget();
+    //   input_file >> delimiter;
+    //   assert(delimiter == 0);
+    // }
+    // const unsigned index = literal < 0 ? -1 * literal : literal;
+    // variables_[index].assign_weight(weight, literal > 0, index);
+  }
+  else if (c == 'e'){
+    input_file >> literal;
+    while (literal != 0) {
+
+      const unsigned index = literal < 0 ? -1 * literal : literal;
+      variables_[index].assign_weight(1, true, index);
+      variables_[index].assign_weight(1, false, index);
+      isExist[index] = true;
+      input_file >> literal;
+    }
+  }
+  else if (c == 'c') {
+    input_file.unget();
+  }
+  else {
+    cout << "c invalid weight format" << endl; 
   }
 }
 
@@ -435,6 +458,8 @@ bool Instance::createfromFile(const string &file_name) {
 
   literals_.clear();
   literals_.resize(nVars + 1);
+
+  isExist = vector<bool> (nVars + 1, false);
 
   while ((input_file >> c) && clauses_added < nCls) {
     parseProjection(pcnf, input_file, c);

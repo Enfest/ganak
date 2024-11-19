@@ -22,6 +22,7 @@ class StackLevel {
   //  Solutioncount
   mpf_class branch_model_count_[2] = {0,0};
   bool branch_found_unsat_[2] = {false,false};
+  bool exist = false;
 
   /// remaining Components
 
@@ -109,6 +110,10 @@ public:
     // cout << " for variable branch " << branch_variable_ << " the branch sol is " << branch_model_count_[active_branch_] << endl;
 
   }
+
+   void setExist(bool _exist){
+     exist = _exist;
+   }
   // void includeSolution(const mpz_class &solutions) {
   //   if (branch_found_unsat_[active_branch_]) {
   //     assert(branch_model_count_[active_branch_] == 0);
@@ -164,7 +169,15 @@ public:
     // cout << "Debug: the total model count for " << branch_variable_ << " decision is "
     //      << branch_model_count_[0] << " " <<  branch_model_count_[1] << " "
     //      << branch_model_count_[0] + branch_model_count_[1] << endl;
-    return branch_model_count_[0] + branch_model_count_[1];
+    if (exist){
+      std::cout << "var " << branch_variable_ << ": " << branch_model_count_[0] << " | " << branch_model_count_[1] << std::endl;
+      std::cout << "var " << branch_variable_ << ": " << std::max(branch_model_count_[0], branch_model_count_[1]) << std::endl;
+      return std::max(branch_model_count_[0], branch_model_count_[1]);
+    }
+    else{
+      std::cout << "var " << branch_variable_ << ": " << std::max(branch_model_count_[0], branch_model_count_[1]) << std::endl;
+      return branch_model_count_[0] + branch_model_count_[1];
+    }
   }
 };
 

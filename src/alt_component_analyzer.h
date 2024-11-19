@@ -103,7 +103,7 @@ public:
         archetype_.stack_level().includeSolution(1);
       } else {
         mpf_class weight = variables_[v].get_weight(true) + variables_[v].get_weight(false);
-        archetype_.stack_level().includeSolution(weight);
+        archetype_.stack_level().includeSolution(1); // both exist and random should be 1? not weight?
       }
       archetype_.setVar_in_other_comp(v);
       return false;

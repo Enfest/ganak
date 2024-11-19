@@ -476,6 +476,7 @@ void Solver::decideLiteral() {
 	}
 	LiteralID theLit(max_score_var, polarity);
 	stack_.top().setbranchvariable(max_score_var);
+	stack_.top().setExist(isExist[max_score_var]);
 
 	setLiteralIfFree(theLit);
 	statistics_.num_decisions_++;

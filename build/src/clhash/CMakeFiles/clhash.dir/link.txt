@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC  -fPIC -std=c99 -Wall -msse4.1 -mpclmul -O2 -g   -O2 -shared -Wl,-soname,libclhash.so -o libclhash.so CMakeFiles/clhash.dir/clhash.c.o 

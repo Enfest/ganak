@@ -1,0 +1,12 @@
+/home/enfest/SAT/ganak/build/CMakeFiles/edit_cache.dir
+/home/enfest/SAT/ganak/build/CMakeFiles/rebuild_cache.dir
+/home/enfest/SAT/ganak/build/src/CMakeFiles/ganak.dir
+/home/enfest/SAT/ganak/build/src/CMakeFiles/ganak-bin.dir
+/home/enfest/SAT/ganak/build/src/CMakeFiles/edit_cache.dir
+/home/enfest/SAT/ganak/build/src/CMakeFiles/rebuild_cache.dir
+/home/enfest/SAT/ganak/build/src/component_types/CMakeFiles/component_types.dir
+/home/enfest/SAT/ganak/build/src/component_types/CMakeFiles/edit_cache.dir
+/home/enfest/SAT/ganak/build/src/component_types/CMakeFiles/rebuild_cache.dir
+/home/enfest/SAT/ganak/build/src/clhash/CMakeFiles/clhash.dir
+/home/enfest/SAT/ganak/build/src/clhash/CMakeFiles/edit_cache.dir
+/home/enfest/SAT/ganak/build/src/clhash/CMakeFiles/rebuild_cache.dir
