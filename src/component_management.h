@@ -190,68 +190,72 @@ bool ComponentManager::findNextRemainingComponentOf(StackLevel &top)
     return true; 
   // if no component remains -> meaning that no matter what the value of this variable is -> it will be satisfied -> prob = 1
   // make sure, at least that the current branch is considered SAT
-  if(!top.branch_found_unsat()){
-    // std::cout << "current remain comp: " << top.currentRemainingComponent() << std::endl;
-    std::cout << "findNext component stack: " << component_stack_.back()->num_variables() << std::endl;
-    bool satisfied = ana_.isSatisfied(LiteralID(top.getbranchvar(), true));
-    if (top.isSecondBranch()){
-      std::cout << "findNext var: " << top.getbranchvar() << " branch: " << top.isSecondBranch() << std::endl;
-      std::cout << "findNext satisfied(true): " << ana_.isSatisfied(LiteralID(top.getbranchvar(), true)) << std::endl;
-      std::cout << "findNext satisfied(false): " << ana_.isSatisfied(LiteralID(top.getbranchvar(), false)) << std::endl;
-    }
-    else {
-      std::cout << "findNext var: " << top.getbranchvar() << " branch: " << top.isSecondBranch() << std::endl;
-      std::cout << "findNext satisfied(true): " << ana_.isSatisfied(LiteralID(top.getbranchvar(), true)) << std::endl;
-      std::cout << "findNext satisfied(false): " << ana_.isSatisfied(LiteralID(top.getbranchvar(), false)) << std::endl;
-    }
-    cout << "findNext satisfied: " << satisfied << endl;
-    if (satisfied){
-      top.includeSolution(1);
-    }
-    else {
-      for (auto vt = component_stack_.back()->varsBegin(); *vt != varsSENTINEL; vt++){
-        std::cout << "findNext component var: " << *vt << std::endl;
-        if(*vt != top.getbranchvar()){
-          bool pos_var = ana_.isSatisfied(LiteralID(*vt, true));
-          if (pos_var){
-            top.includeSolution(probability_(*vt));
-          }
-          else{
-            top.includeSolution(1-probability_(*vt));
-          }
-          std::cout << "branch 0 sat(false): " << ana_.isSatisfied(LiteralID(*vt, false)) << std::endl;
-          std::cout << "branch 1 sat(true): " << ana_.isSatisfied(LiteralID(*vt, true)) << std::endl;
-          std::cout << "branch 0 rel(false): " << ana_.isResolved(LiteralID(*vt, false)) << std::endl;
-          std::cout << "branch 1 rel(true): " << ana_.isResolved(LiteralID(*vt, true)) << std::endl;
-          std::cout << "branch 0 act(false): " << ana_.isActive(LiteralID(*vt, false)) << std::endl;
-          std::cout << "branch 1 act(true): " << ana_.isActive(LiteralID(*vt, true)) << std::endl;
-          // if (!ana_.isSatisfied(LiteralID(*vt, false))){
-          //   top.includeSolution(probability_(*vt));
-          // }
-          // else{
-          //   top.includeSolution(1-probability_(*vt));
-          // }
-        }
-        // else if (*vt != top.getbranchvar() && satisfied){
-        //   top.includeSolution(1);
-        // }
-      }
-    }
+  top.includeSolution(1);
+  // if(!top.branch_found_unsat()){
+  //   // std::cout << "current remain comp: " << top.currentRemainingComponent() << std::endl;
+  //   std::cout << "findNext component stack: " << component_stack_.back()->num_variables() << std::endl;
+  //   bool satisfied = ana_.isSatisfied(LiteralID(top.getbranchvar(), true));
+  //   // if (top.isSecondBranch()){
+  //   //   std::cout << "findNext var: " << top.getbranchvar() << " branch: " << top.isSecondBranch() << std::endl;
+  //   //   std::cout << "findNext satisfied(true): " << ana_.isSatisfied(LiteralID(top.getbranchvar(), true)) << std::endl;
+  //   //   std::cout << "findNext satisfied(false): " << ana_.isSatisfied(LiteralID(top.getbranchvar(), false)) << std::endl;
+  //   // }
+  //   // else {
+  //   //   std::cout << "findNext var: " << top.getbranchvar() << " branch: " << top.isSecondBranch() << std::endl;
+  //   //   std::cout << "findNext satisfied(true): " << ana_.isSatisfied(LiteralID(top.getbranchvar(), true)) << std::endl;
+  //   //   std::cout << "findNext satisfied(false): " << ana_.isSatisfied(LiteralID(top.getbranchvar(), false)) << std::endl;
+  //   // }
+  //   cout << "findNext satisfied: " << satisfied << endl;
+  //   if (satisfied){
+  //     top.includeSolution(1);
+  //   }
+  //   else {
+  //     for (auto vt = component_stack_.back()->varsBegin(); *vt != varsSENTINEL; vt++){
+  //       std::cout << "findNext component var: " << *vt << std::endl;
+  //       if(*vt != top.getbranchvar() && !isExistVariable_(*vt)){
+  //         bool pos_var = ana_.isSatisfied(LiteralID(*vt, true));
+  //         if (pos_var){
+  //           top.includeSolution(probability_(*vt));
+  //         }
+  //         else{
+  //           top.includeSolution(1-probability_(*vt));
+  //         }
+  //         // std::cout << "branch 0 sat(false): " << ana_.isSatisfied(LiteralID(*vt, false)) << std::endl;
+  //         // std::cout << "branch 1 sat(true): " << ana_.isSatisfied(LiteralID(*vt, true)) << std::endl;
+  //         // std::cout << "branch 0 rel(false): " << ana_.isResolved(LiteralID(*vt, false)) << std::endl;
+  //         // std::cout << "branch 1 rel(true): " << ana_.isResolved(LiteralID(*vt, true)) << std::endl;
+  //         // std::cout << "branch 0 act(false): " << ana_.isActive(LiteralID(*vt, false)) << std::endl;
+  //         // std::cout << "branch 1 act(true): " << ana_.isActive(LiteralID(*vt, true)) << std::endl;
+  //         // if (!ana_.isSatisfied(LiteralID(*vt, false))){
+  //         //   top.includeSolution(probability_(*vt));
+  //         // }
+  //         // else{
+  //         //   top.includeSolution(1-probability_(*vt));
+  //         // }
+  //       }
+  //       else if(*vt != top.getbranchvar()) {
+  //         top.includeSolution(1);
+  //       }
+  //       // else if (*vt != top.getbranchvar() && satisfied){
+  //       //   top.includeSolution(1);
+  //       // }
+  //     }
+  //   }
     
-    cout << "findNext remain comp of: " << top.literal_stack_ofs() << endl;
-    // component
-    // top.includeSolution(1);
-    std::cout<<"findNext var: "<<top.getbranchvar() <<" branch: "<< top.isSecondBranch()<<" prob: "<<1<<'\n';
-    // if(isExistVariable_(top.getbranchvar())){
-    //   top.includeSolution(1);}
-    // else{
-    //   auto prob =probability_(top.getbranchvar());
-    //   std::cout<<"findNext var"<<top.getbranchvar()<<"prob"<<prob<<'\n';
-    //   if(top.isSecondBranch()) top.includeSolution(prob);
-    //   else top.includeSolution(1-prob); // this is a model count prob = 1
-    // }
-    // std::cout << "no remaining components, include solution 1" << std::endl;
-  }
+  //   cout << "findNext remain comp of: " << top.literal_stack_ofs() << endl;
+  //   // component
+  //   // top.includeSolution(1);
+  //   std::cout<<"findNext var: "<<top.getbranchvar() <<" branch: "<< top.isSecondBranch()<<" prob: "<<1<<'\n';
+  //   // if(isExistVariable_(top.getbranchvar())){
+  //   //   top.includeSolution(1);}
+  //   // else{
+  //   //   auto prob =probability_(top.getbranchvar());
+  //   //   std::cout<<"findNext var"<<top.getbranchvar()<<"prob"<<prob<<'\n';
+  //   //   if(top.isSecondBranch()) top.includeSolution(prob);
+  //   //   else top.includeSolution(1-prob); // this is a model count prob = 1
+  //   // }
+  //   // std::cout << "no remaining components, include solution 1" << std::endl;
+  // }
   // top.includeSolution(1);
   
   return false;

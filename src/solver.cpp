@@ -75,11 +75,14 @@ bool Solver::simplePreProcess() { // after counting the unit prob, the stack wil
   }
   std::cout << "stack size: " << stack_.size() << std::endl;
   stack_.top().printbranchvalue();
-  std::cout << "Unit Clause Prob: " << stack_.top().getBranchSols() << std::endl;
+  
   //end process unit clauses
-  double unit_prob = stack_.top().getBranchSols();
+  
 
   bool succeeded = BCP(start_ofs);
+
+  double unit_prob = stack_.top().getBranchSols();
+  
 
   if (succeeded)
     succeeded &= prepFailedLiteralTest();
@@ -87,6 +90,7 @@ bool Solver::simplePreProcess() { // after counting the unit prob, the stack wil
   if (succeeded){
     HardWireAndCompact(); // reinit the stack
     stack_.top().includeSolution(unit_prob);
+    std::cout << "Unit Clause Prob: " << stack_.top().getBranchSols() << std::endl;
   }
 
   return succeeded;
@@ -491,9 +495,14 @@ void Solver::decideLiteral() {
   }
   LiteralID theLit(max_score_var, polarity);
   stack_.top().setbranchvariable(max_score_var);
-  if(stack_.top().getbranchvar() > 0){
-    std::cout << "decide literal: " << stack_.top().getbranchvar() << " prob: " << prob[stack_.top().getbranchvar()] << " exist: " << isExist[stack_.top().getbranchvar()] << std::endl;
+  if(theLit.toInt() > 0){
+    std::cout << "decide literal: " << theLit.toInt() << " prob: " << prob[stack_.top().getbranchvar()] << " exist: " << isExist[stack_.top().getbranchvar()] << std::endl;
     stack_.top().setProb(prob[stack_.top().getbranchvar()]);
+    stack_.top().setExist(isExist[stack_.top().getbranchvar()]);
+  }
+  else {
+    std::cout << "decide literal: " << theLit.toInt() << " prob: " << 1 - prob[stack_.top().getbranchvar()] << " exist: " << isExist[stack_.top().getbranchvar()] << std::endl;
+    stack_.top().setProb(1-prob[stack_.top().getbranchvar()]);
     stack_.top().setExist(isExist[stack_.top().getbranchvar()]);
   }
   setLiteralIfFree(theLit);
@@ -626,6 +635,7 @@ retStateT Solver::backtrack() {
           config_.use_lso = false;
         }
         stack_.top().changeBranch();
+        stack_.top().printbranchvalue();
         reactivateTOS();
         setLiteralIfFree(aLit.neg(), NOT_A_CLAUSE);
         return RESOLVED;
@@ -752,10 +762,20 @@ bool Solver::bcp() {
   // the asserted literal has been set, so we start
   // bcp on that literal
   unsigned start_ofs = literal_stack_.size() - 1;
-
+  cout << "bcp start_ofs: " << start_ofs << " unit clause: " << unit_clauses_.size() << std::endl;
   //BEGIN process unit clauses
   for (auto lit : unit_clauses_) {
     setLiteralIfFree(lit);
+    
+    if (!isExist[lit.var()]) {
+      if (lit.sign()){
+        stack_.top().includeSolution(prob[lit.var()]);
+        cout << "BCP unit clause: " << lit.var() << " (" << prob[lit.var()] << ") " << std::endl;
+      } else {
+        stack_.top().includeSolution(1-prob[lit.var()]);
+        cout << "BCP unit clause: " << lit.var() << " (" << 1-prob[lit.var()] << ") " << std::endl;
+      }
+    }
   }
   //END process unit clauses
 
@@ -768,16 +788,31 @@ bool Solver::bcp() {
 }
 
 bool Solver::BCP(unsigned start_at_stack_ofs) {
+  cout << "BCP start_at_stack_ofs: " << start_at_stack_ofs << std::endl;
   for (unsigned int i = start_at_stack_ofs; i < literal_stack_.size(); i++) {
     LiteralID unLit = literal_stack_[i].neg();
+    cout << "BCP: " << unLit.toInt() << std::endl;
     //BEGIN Propagate Bin Clauses
     for (auto bt = literal(unLit).binary_links_.begin();
          *bt != SENTINEL_LIT; bt++) {
+      cout << "propagate bin clauses: (" << (*bt).var() << std::endl;
       if (isResolved(*bt)) {
         setConflictState(unLit, *bt);
+        cout << "conflict state: " << unLit.toInt() << " " << (*bt).toInt() << std::endl;
         return false;
       }
       setLiteralIfFree(*bt, Antecedent(unLit));
+      if (!isExist[(*bt).var()]){
+        cout << "BCP include solution: " << (*bt).var() << " branch: " << stack_.top().isSecondBranch() << std::endl;
+        cout << "BCP stack_.top().getBranchSols(): " << stack_.top().getBranchSols() << std::endl;
+        if ((*bt).sign()){
+          stack_.top().includeSolution(prob[(*bt).var()]);
+        } else {
+          stack_.top().includeSolution(1-prob[(*bt).var()]);
+        }
+        cout << "BCP stack_.top().getBranchSols(): " << stack_.top().getBranchSols() << std::endl;
+        cout << "BCP iteration: " << i << "/" << literal_stack_.size()<< std::endl;
+      }
     }
     //END Propagate Bin Clauses
     for (auto itcl = literal(unLit).watch_list_.rbegin();
@@ -804,11 +839,24 @@ bool Solver::BCP(unsigned start_at_stack_ofs) {
         // and we have hence no free literal left
         // for p_otherLit remain poss: Active or Resolved
         if (setLiteralIfFree(*p_otherLit, Antecedent(*itcl))) { // implication
+          // cout << "BCP implication: " << (*p_otherLit).var() << " (isLitA: " << isLitA << ") " << std::endl;
+          // if (!isExist[(*p_otherLit).var()]){
+          //   cout << "BCP include solution: " << (*p_otherLit).var() << std::endl;
+          //   cout << "BCP stack_.top().getBranchSols(): " << stack_.top().getBranchSols() << std::endl;
+          //   if ((*p_otherLit).sign()){
+          //     stack_.top().includeSolution(prob[(*p_otherLit).var()]);
+          //   } else {
+          //     stack_.top().includeSolution(1-prob[(*p_otherLit).var()]);
+          //   }
+          //   cout << "BCP stack_.top().getBranchSols(): " << stack_.top().getBranchSols() << std::endl;
+          //   cout << "BCP iteration: " << i << "/" << literal_stack_.size()<< std::endl;
+          // }
           if (isLitA) {
             swap(*p_otherLit, *p_watchLit);
           }
         } else {
           setConflictState(*itcl);
+          cout << "conflict state: " << unLit.toInt() << std::endl;
           return false;
         }
       }
@@ -819,6 +867,7 @@ bool Solver::BCP(unsigned start_at_stack_ofs) {
 
 // this is IBCP 30.08
 bool Solver::implicitBCP() {
+  cout << "implicitBCP" << std::endl;
   static vector<LiteralID> test_lits(num_variables());
   static LiteralIndexedVector<unsigned char> viewed_lits(num_variables() + 1,
                                                          0);

@@ -21,7 +21,7 @@ struct SolverConfiguration {
   // TODO component caching cannot be deactivated for now!
   bool perform_non_chron_back_track = true;
   bool perform_component_caching = true;
-  bool perform_failed_lit_test = true;
+  bool perform_failed_lit_test =false;
   bool perform_pre_processing = true;
   bool perform_pcc = true;
   bool use_csvsads = true;

@@ -435,7 +435,7 @@ bool Instance::createfromFile(const string &file_name) {
   unsigned clauses_in_file = 0;
 
   isExist = vector<bool> (nVars + 1, false);
-  prob = vector<double> (nVars + 1, 0);
+  prob = vector<double> (nVars + 1, -1);
 
   vector<double> prob_init(nVars + 1, -1);
   vector<bool> isExist_init(nVars + 1, false);
