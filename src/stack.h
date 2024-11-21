@@ -171,15 +171,15 @@ public:
     // cout << "Debug: the total model count for " << branch_variable_ << " decision is "
     //      << branch_model_count_[0] << " " <<  branch_model_count_[1] << " "
     //      << branch_model_count_[0] + branch_model_count_[1] << endl;
-    std::cout << "EXIST SET: " << set_exist << std::endl;
+    // std::cout << "EXIST SET: " << set_exist << std::endl;
     if (exist){
-      std::cout << "exist branch var " << branch_variable_ << ": " << branch_model_count_[0] << " | " << branch_model_count_[1] << std::endl;
-      std::cout << "var " << branch_variable_ << ": " << std::max(branch_model_count_[0], branch_model_count_[1]) << std::endl;
+      // std::cout << "exist branch var " << branch_variable_ << ": " << branch_model_count_[0] << " | " << branch_model_count_[1] << std::endl;
+      // std::cout << "var " << branch_variable_ << ": " << std::max(branch_model_count_[0], branch_model_count_[1]) << std::endl;
       return std::max(branch_model_count_[0], branch_model_count_[1]);
     }
     else{
-      std::cout << "random branch var " << branch_variable_ << ": " << branch_model_count_[0] << " | " << branch_model_count_[1] << std::endl;
-      std::cout << "var " << branch_variable_ << ": " << branch_model_count_[0] + branch_model_count_[1] << std::endl;
+      // std::cout << "random branch var " << branch_variable_ << ": " << branch_model_count_[0] << " | " << branch_model_count_[1] << std::endl;
+      // std::cout << "var " << branch_variable_ << ": " << branch_model_count_[0] + branch_model_count_[1] << std::endl;
       return branch_model_count_[0] + branch_model_count_[1];
     }
   }

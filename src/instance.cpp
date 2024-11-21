@@ -296,11 +296,11 @@ void Instance::parseWeights(ifstream& input_file, char& c) {
   mpf_class weight;
   int delimiter;
   if (c == 'r') {
-    cout << "Reading r" << endl;
+    // cout << "Reading r" << endl;
     input_file >> weight;
     input_file >> literal;
     int cur_level = 0;
-    cout << "quan back: " << quantifier_level.back() << " size: " << quantifier_level.size() << endl; 
+    // cout << "quan back: " << quantifier_level.back() << " size: " << quantifier_level.size() << endl; 
     if (quantifier_level.size() == 0 || quantifier_level.back() != 'r'){
       cur_level = quantifier_level.size();
       quantifier_level.push_back('r');
@@ -313,7 +313,7 @@ void Instance::parseWeights(ifstream& input_file, char& c) {
       variables_[index].assign_weight(weight, true, index);
       variables_[index].assign_weight(1-weight, false, index);
       variables_[index].set_quant_level(cur_level);
-      cout << "var " << index << " quant level: " << variables_[index].get_quant_level() << endl;
+      // cout << "var " << index << " quant level: " << variables_[index].get_quant_level() << endl;
       input_file >> literal;
     }
     // char eofchar;
@@ -330,7 +330,7 @@ void Instance::parseWeights(ifstream& input_file, char& c) {
     // variables_[index].assign_weight(weight, literal > 0, index);
   }
   else if (c == 'e'){
-    cout << "Reading e" << endl;
+    // cout << "Reading e" << endl;
     input_file >> literal;
     int cur_level = 0;
     // cout << "quan back: " << quantifier_level.back() << " size: " << quantifier_level.size() << endl; 
@@ -348,7 +348,7 @@ void Instance::parseWeights(ifstream& input_file, char& c) {
       variables_[index].assign_weight(1, false, index);
       isExist[index] = true;
       variables_[index].set_quant_level(cur_level);
-      cout << "var " << index << " quant level: " << variables_[index].get_quant_level() << endl;
+      // cout << "var " << index << " quant level: " << variables_[index].get_quant_level() << endl;
       input_file >> literal;
     }
   }

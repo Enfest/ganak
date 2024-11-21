@@ -326,7 +326,7 @@ void Solver::decideLiteral() {
 			max_score_level = variables_[max_score_var].get_quant_level();
 		}
 		while (*it != varsSENTINEL) {
-			cout << *it << " " << variables_[*it].get_quant_level() << endl;
+			// cout << *it << " " << variables_[*it].get_quant_level() << endl;
 			if(independent_support_.find(*it) != independent_support_.end()){
 				isindependent_support_present = true;
 				score = scoreOf(*it);
@@ -370,7 +370,7 @@ void Solver::decideLiteral() {
 			max_score = -1;
 			score = -1;
 			max_score_level = variables_.size();
-			cout << "Not independent" << endl;
+			// cout << "Not independent" << endl;
 			for (auto it =
 				comp_manager_.superComponentOf(stack_.top()).varsBegin();
 				*it != varsSENTINEL; it++) {
@@ -526,7 +526,7 @@ void Solver::decideLiteral() {
 		break;
 	}
 	LiteralID theLit(max_score_var, polarity);
-	cout << "Deciding on: " << theLit.toInt() << " with sign " << theLit.sign() << " " << max_score_level << endl;
+	// cout << "Deciding on: " << theLit.toInt() << " with sign " << theLit.sign() << " " << max_score_level << endl;
 	stack_.top().setbranchvariable(max_score_var);
 	stack_.top().setExist(isExist[max_score_var]);
 
