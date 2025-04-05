@@ -99,10 +99,11 @@ public:
     recordComponentOf(v);
 
     if (search_stack_.size() == 1) {
+      // cout  << "Debug: search stack = 1: " << v << " " << (independent_support_.count(v) == 0) << endl;
       if (independent_support_.count(v) == 0 && perform_projected_model_count_) {
         archetype_.stack_level().includeSolution(1);
       } else {
-        mpf_class weight = variables_[v].get_weight(true) + variables_[v].get_weight(false);
+        // mpf_class weight = variables_[v].get_weight(true) + variables_[v].get_weight(false);
         // cout << "weight: " << weight << endl;
         archetype_.stack_level().includeSolution(1); // both exist and random should be 1? not weight?
       }

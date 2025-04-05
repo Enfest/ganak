@@ -219,7 +219,7 @@ private:
 		literal_values_[lit.neg()] = F_TRI;
     if (partial_include) {
 			if (config_.perform_projectedmodelcounting) {
-				if (independent_support_.count(lit.var()) != 0) {
+				if (independent_support_.count(lit.var()) != 0 && false) {
 					if (var(lit).polarity) {
 						comp_manager_.include_partial_solution(lit.var());
 					} else {
@@ -279,7 +279,7 @@ private:
 		for (auto it = TOSLiteralsBegin(); it != literal_stack_.end(); it++) {
 			unSet(*it);
 			if (include_partial_sol) {
-				if (config_.perform_projectedmodelcounting) {
+				if (config_.perform_projectedmodelcounting && false) {
 					if (independent_support_.count((*it).var()) != 0) {
 						if (var(*it).polarity) {
 							comp_manager_.include_partial_solution((*it).var());

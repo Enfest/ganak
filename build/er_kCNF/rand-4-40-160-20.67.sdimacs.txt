@@ -1,0 +1,288 @@
+c Outputting solution to console
+c GANAK version 1.0.0
+c ganak GIT revision: 659992b1d5232cfa7c3aa51db29625c976b0e263
+c ganak build env: CMAKE_CXX_COMPILER = /usr/bin/c++ | CMAKE_CXX_FLAGS =  -mtune=native -Wall -Wextra -Wunused -Wsign-compare -fno-omit-frame-pointer -Wtype-limits -Wuninitialized -Wno-deprecated -Wstrict-aliasing -Wpointer-arith -Wpointer-arith -Wformat-nonliteral -Winit-self -Wparentheses -Wunreachable-code -ggdb3 | COMPILE_DEFINES =  | STATICCOMPILE = OFF | ONLY_SIMPLE =  | Boost_FOUND =  | ZLIB_FOUND =  | ENABLE_TESTING =  | ENABLE_ASSERTIONS = ON | MY_TARGETS =  | compilation date time = Nov 21 2024 15:08:17
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c invalid weight format
+c Solving ../ssat-benchmarks/er-random-k-CNF/rand-4-40-160-20.67.sdimacs
+c variables (all/used/free): 	40/40/0
+c clauses (all/long/binary/unit): 160/160/0/0
+c Sampling set not present! So doing total model counting.
+c Weight of +1 0.37
+c Weight of -1 0.63
+c Weight of +2 0.37
+c Weight of -2 0.63
+c Weight of +3 0.37
+c Weight of -3 0.63
+c Weight of +4 0.37
+c Weight of -4 0.63
+c Weight of +5 0.37
+c Weight of -5 0.63
+c Weight of +6 0.37
+c Weight of -6 0.63
+c Weight of +7 0.37
+c Weight of -7 0.63
+c Weight of +8 0.37
+c Weight of -8 0.63
+c Weight of +9 0.37
+c Weight of -9 0.63
+c Weight of +10 0.37
+c Weight of -10 0.63
+c Weight of +11 0.37
+c Weight of -11 0.63
+c Weight of +12 0.37
+c Weight of -12 0.63
+c Weight of +13 0.37
+c Weight of -13 0.63
+c Weight of +14 0.37
+c Weight of -14 0.63
+c Weight of +15 0.37
+c Weight of -15 0.63
+c Weight of +16 0.37
+c Weight of -16 0.63
+c Weight of +17 0.37
+c Weight of -17 0.63
+c Weight of +18 0.37
+c Weight of -18 0.63
+c Weight of +19 0.37
+c Weight of -19 0.63
+c Weight of +20 0.37
+c Weight of -20 0.63
+c Weight of +21 1
+c Weight of -21 1
+c Weight of +22 1
+c Weight of -22 1
+c Weight of +23 1
+c Weight of -23 1
+c Weight of +24 1
+c Weight of -24 1
+c Weight of +25 1
+c Weight of -25 1
+c Weight of +26 1
+c Weight of -26 1
+c Weight of +27 1
+c Weight of -27 1
+c Weight of +28 1
+c Weight of -28 1
+c Weight of +29 1
+c Weight of -29 1
+c Weight of +30 1
+c Weight of -30 1
+c Weight of +31 1
+c Weight of -31 1
+c Weight of +32 1
+c Weight of -32 1
+c Weight of +33 1
+c Weight of -33 1
+c Weight of +34 1
+c Weight of -34 1
+c Weight of +35 1
+c Weight of -35 1
+c Weight of +36 1
+c Weight of -36 1
+c Weight of +37 1
+c Weight of -37 1
+c Weight of +38 1
+c Weight of -38 1
+c Weight of +39 1
+c Weight of -39 1
+c Weight of +40 1
+c Weight of -40 1
+c 
+c Preprocessing ..
+c Preprocessing done
+c DONE
+c variables (all/used/free): 	40/40/0
+c clauses (all/long/binary/unit): 160/160/0/0
+c Maximum cache size:	64037 MB
+c 
+
+c Max decision level :25
+c Doing Restart
+c We have solved halfed
+c We have solved halfed
+c 
+c 
+c variables (total / active / free)	40/40/0
+c clauses (removed) 			160 (0)
+c decisions 				1473841
+c Max. decision level 			36
+c conflicts 				25044
+c conflict clauses (all/bin/unit) 	4519/0/0
+c 
+c failed literals found by implicit BCP 	 0
+c implicit BCP miss rate 	 0%
+c bytes cache size     	190208504	
+c bytes cache (overall) 	190789748
+c bytes cache components (overall) 	166361036
+c bytes cache (infra / comps) 24428712/165779792	
+c bytes pure comp data (curr)    24206176
+c bytes pure comp data (overall) 26363476
+c bytes cache with sysoverh (curr)    249040408
+c bytes cache with sysoverh (overall) 249914872
+c cache (lookup / stores / hits) 			2908358/1478843/1429516
+c cache miss rate 50.848%
+c avg. variable count (stores / hits) 	10.4853/3.85769
+c 
+c 
+c time: 3.66357s
+s SATISFIABLE 
+s wmc 0.0401248965765501395164

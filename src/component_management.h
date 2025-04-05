@@ -108,6 +108,7 @@ public:
 
   void multiply_partial_solution(StackLevel &top) {
     top.includeSolution(partial_solution_);
+    // cout << "Debug: multiply_partial_solution : " << partial_solution_ << endl;
     partial_solution_ = 1;
   }
 

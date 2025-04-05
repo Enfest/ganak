@@ -184,12 +184,14 @@ public:
   }
 
   void set_final_solution_count(const mpf_class &count) {
+    // cout << "Debug: set_final_solution_count: " <<final_solution_count_<<"/"<< count << "/" << num_free_unweighted_variables_ << endl;
     mpf_mul_2exp(final_solution_count_.get_mpf_t (),
                  count.get_mpf_t (),
                  num_free_unweighted_variables_);
   }
 
   void set_final_solution_count_projected(const mpf_class &count) {
+    // cout << "Debug: set_final_solution_count: " <<final_solution_count_<<"/"<< count << "/" << num_free_unweighted_variables_ << endl;
      mpf_mul_2exp(
       final_solution_count_.get_mpf_t (),
       count.get_mpf_t (),

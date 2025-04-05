@@ -108,7 +108,7 @@ public:
     } else {
       branch_model_count_[active_branch_] *= solutions;
     }
-    // cout << " for variable branch " << branch_variable_ << " the branch sol is " << branch_model_count_[active_branch_] << endl;
+    // std::cout << "Debug: for variable branch " << branch_variable_ << " the branch sol is " << branch_model_count_[active_branch_] << std::endl;
 
   }
 

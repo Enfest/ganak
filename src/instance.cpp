@@ -138,6 +138,10 @@ void Instance::compactVariables() {
         if ((independent_support_.find(v) != independent_support_.end()) && (!mpf_cmp_d(variables_[v].get_weight(true).get_mpf_t(), 1.0))) {
           ++num_unweighted_pisolated;
         }
+        if (independent_support_.find(v) != independent_support_.end()) {
+          independent_support_.erase(v);
+        }
+        cout << "isolated variable: " << variables_[v].get_weight(true) << endl;
         if (!mpf_cmp_d(variables_[v].get_weight(true).get_mpf_t(), 1.0)) {
           num_unweighted++;
         }

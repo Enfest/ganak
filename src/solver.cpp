@@ -228,11 +228,25 @@ void Solver::solve(const string &file_name) {
     //      << " " << comp_manager_.get_saved_partial_sol()
     //      << endl;
 		if (config_.perform_projectedmodelcounting) {
+		// 	cout << "Debug: seft_final_solution_count_projected: "
+		//  << stack_.top().getTotalModelCount()
+		//  << " " << comp_manager_.get_saved_partial_sol()
+		//  << endl;
+		// 	statistics_.set_final_solution_count_projected(
+        // stack_.top().getTotalModelCount() * comp_manager_.get_saved_partial_sol());
+		// FIXED: independent support don't need to be multiplied
 			statistics_.set_final_solution_count_projected(
-        stack_.top().getTotalModelCount() * comp_manager_.get_saved_partial_sol());
+				stack_.top().getTotalModelCount());
     } else {
+		// cout << "Debug: seft_final_solution_count_projected: "
+		//  << stack_.top().getTotalModelCount()
+		//  << " " << comp_manager_.get_saved_partial_sol()
+		//  << endl;
+		// FIXED: independent support don't need to be multiplied
+		// 	statistics_.set_final_solution_count(
+        // stack_.top().getTotalModelCount() * comp_manager_.get_saved_partial_sol());
 			statistics_.set_final_solution_count(
-        stack_.top().getTotalModelCount() * comp_manager_.get_saved_partial_sol());
+        stack_.top().getTotalModelCount());
     }
 		statistics_.num_long_conflict_clauses_ = num_conflict_clauses();
 
@@ -318,26 +332,31 @@ void Solver::decideLiteral() {
 		bool isindependent_support_present = false;
 		while(*it != varsSENTINEL && independent_support_.find(*it) == independent_support_.end()){
 			it++;
+			
 		}
 		if (*it != varsSENTINEL){
 			isindependent_support_present = true;
 			max_score_var = *it;
 			max_score = scoreOf(*it);
 			max_score_level = variables_[max_score_var].get_quant_level();
+			// cout << "Maybe Literal: " << max_score_var << " " << max_score_level << " " << max_score_level << endl;
 		}
 		while (*it != varsSENTINEL) {
 			// cout << *it << " " << variables_[*it].get_quant_level() << endl;
 			if(independent_support_.find(*it) != independent_support_.end()){
+				// cout << "Independent Literal: " << *it << " " << variables_[*it].get_quant_level() << " " << max_score_level << endl;
 				isindependent_support_present = true;
 				score = scoreOf(*it);
 				if (score > max_score && variables_[*it].get_quant_level() == max_score_level) {
 					max_score = score;
 					max_score_var = *it;
+					// cout << "Maybe Literal: " << max_score_var << " " << max_score_level << " " << max_score_level << endl;
 				}
 				else if (variables_[*it].get_quant_level() < max_score_level) {
 					max_score = score;
 					max_score_var = *it;
 					max_score_level = variables_[max_score_var].get_quant_level();
+					// cout << "Maybe Literal: " << max_score_var << " " << max_score_level << " " << max_score_level << endl;
 				}
 			}
 			it++;
@@ -348,11 +367,13 @@ void Solver::decideLiteral() {
 					 *it != varsSENTINEL; it++) {
 				if(independent_support_.find(*it) != independent_support_.end()){
 					score = scoreOf(*it);
+					// cout << "Independent Literal: " << *it << " " << variables_[*it].get_quant_level() << " " << max_score_level << endl;
 					if (score > max_score*config_.csvsads_param && variables_[*it].get_quant_level() == max_score_level) {
 						if (comp_manager_.cacheScoreOf(*it) > cachescore){
 							isindependent_support_present = true;
 							max_score_var = *it;
 							cachescore = comp_manager_.cacheScoreOf(*it);
+							// cout << "Maybe Literal: " << max_score_var << " " << max_score_level << " " << max_score_level << endl;
 						}
 					}
 					else if (variables_[*it].get_quant_level() < max_score_level) {
@@ -360,6 +381,7 @@ void Solver::decideLiteral() {
 						max_score_var = *it;
 						max_score_level = variables_[max_score_var].get_quant_level();
 						cachescore = comp_manager_.cacheScoreOf(*it);
+						// cout << "Maybe Literal: " << max_score_var << " " << max_score_level << " " << max_score_level << endl;
 					}
 				}
 			}
@@ -486,6 +508,7 @@ void Solver::decideLiteral() {
 	// this assert should always hold,
 	// if not then there is a bug in the logic of countSAT();
 	assert(max_score_var != 0);
+	// cout << "Debug: Deciding on: " << max_score_var << " with sign " << true << " " << max_score_level << endl;
 	bool polarity = true;
 	switch(config_.polarity_config) {
 		case polar_false:
@@ -525,6 +548,7 @@ void Solver::decideLiteral() {
 			}
 		break;
 	}
+	// cout << "Debug: Deciding on: " << max_score_var << " with sign " << polarity << " " << max_score_level << endl;
 	LiteralID theLit(max_score_var, polarity);
 	// cout << "Deciding on: " << theLit.toInt() << " with sign " << theLit.sign() << " " << max_score_level << endl;
 	stack_.top().setbranchvariable(max_score_var);
@@ -554,7 +578,7 @@ void Solver::decideLiteral() {
 			cout << "c Max decision level :" << statistics_.max_decision_level_ << endl;
 		}
 	}
-  // cout << "deciding on: " << theLit.val()<< "with sign " << theLit.sign() << " "<< max_score <<endl;
+  cout << "d Deciding on: " << theLit.val()<< " with sign " << theLit.sign() << " "<< max_score <<endl;
 }
 
 retStateT Solver::backtrack() {
@@ -578,7 +602,10 @@ retStateT Solver::backtrack() {
     comp_manager_.reset_solutions();
 		return RESTART;
 	}
+	// cout << "Debug: isindependent: " << isindependent << endl;
 	if (!isindependent && config_.perform_projectedmodelcounting) {
+	// if (config_.perform_projectedmodelcounting) {
+		// cout << "Debug: Backtracking to: " << stack_.top().getbranchvar() << endl;
 		do{
 			if (stack_.top().branch_found_unsat()){
 				comp_manager_.removeAllCachePollutionsOf(stack_.top());
