@@ -219,8 +219,10 @@ struct Variable {
     }
     const mpf_class &get_weight(const bool lit_sign) const {
       if (lit_sign) {
+        // cout << "get weight: " << pos_weight_ << endl;
         return pos_weight_;
       } else {
+        // cout << "get weight: " << pos_weight_ << endl;
         return neg_weight_;
       }
     }

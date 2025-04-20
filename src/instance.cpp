@@ -108,13 +108,18 @@ void Instance::compactClauses() {
 }
 
 void Instance::compactVariables() {
-
+  cout << "compactVar start" << endl;
   vector<Variable> temp_variables;
+  vector<bool> temp_isExist;
   vector<unsigned> var_map;
   vector<unsigned> rev_map;
   for (auto v: variables_){
     temp_variables.push_back(v);
   }
+  for(auto exist: isExist){
+    temp_isExist.push_back(exist);
+  }
+  cout << "var size: " << variables_.size() << " | " << temp_variables.size() << endl;
   var_map.resize(variables_.size(), 0);
   rev_map.resize(variables_.size(), 0);
   unsigned last_ofs = 0;
@@ -164,9 +169,12 @@ void Instance::compactVariables() {
     independent_support_.insert(*it);
   }
   variables_.clear();
+  isExist.clear();
   variables_.push_back(Variable());
   for (int i = 1; i <= last_ofs; i++) {
+    cout << "map: " << rev_map[i] << " -> " << variables_.size() << endl;;
     variables_.push_back(temp_variables[rev_map[i]]); 
+    isExist.push_back(isExist[rev_map[i]]);
   }
   occurrence_lists_.clear();
   occurrence_lists_.resize(variables_.size());

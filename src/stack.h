@@ -9,6 +9,7 @@
 #define STACK_H_
 
 #include <gmpxx.h>
+#include <iostream>
 
 class StackLevel {
   /// active Component, once initialized, it should not change
@@ -168,9 +169,10 @@ public:
 //	  active_branch_ = 1;
 //  }
   const mpf_class getTotalModelCount() const {
+    std::cout << "var: " << branch_variable_ << " (" << exist << ") " << branch_model_count_[0] << " | " << branch_model_count_[1] << std::endl;
     // cout << "Debug: the total model count for " << branch_variable_ << " decision is "
-    //      << branch_model_count_[0] << " " <<  branch_model_count_[1] << " "
-    //      << branch_model_count_[0] + branch_model_count_[1] << endl;
+        //  << branch_model_count_[0] << " " <<  branch_model_count_[1] << " "
+        //  << branch_model_count_[0] + branch_model_count_[1] << endl;
     // std::cout << "EXIST SET: " << set_exist << std::endl;
     if (exist){
       // std::cout << "exist branch var " << branch_variable_ << ": " << branch_model_count_[0] << " | " << branch_model_count_[1] << std::endl;

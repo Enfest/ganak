@@ -182,8 +182,11 @@ private:
     mpf_class w = 0;
     if (lit > 0) {
       w = variables_[lit].get_weight(true);
+      // cout << "remove include partial: " << abs(lit)  <<  " (" << variables_[lit].get_quant_level() << ") " << " w="<< variables_[lit].get_weight(true) << " | " << variables_[lit].get_weight(false) << endl;
+      
     } else {
       w = variables_[-1*lit].get_weight(false);
+      // cout << "remove include partial: " << abs(lit) <<  " (" << variables_[lit].get_quant_level() << ") " << " w="<< variables_[lit].get_weight(false) << " | " << variables_[lit].get_weight(true) << endl;
     }
    partial_solution_ /= w;
   }
@@ -192,11 +195,14 @@ private:
     mpf_class w = 0;
     if (lit > 0) {
       w = variables_[lit].get_weight(true);
-      partial_solution_ *= w;
+      // cout << "include partial: " << abs(lit)  <<  " (" << variables_[lit].get_quant_level() << ") " << " w="<< variables_[lit].get_weight(true) << " | " << variables_[lit].get_weight(false) << endl;
+      
     } else {
       w = variables_[-1*lit].get_weight(false);
-      partial_solution_ *= w;
+      // cout << "include partial: " << abs(lit) <<  " (" << variables_[lit].get_quant_level() << ") " << " w="<< variables_[lit].get_weight(false) << " | " << variables_[lit].get_weight(true) << endl;
     }
+    // if(w <= 0) w = 1;
+    partial_solution_ *= w;
   }
 
   bool ComponentManager::findNextRemainingComponentOf(StackLevel &top) {

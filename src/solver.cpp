@@ -235,8 +235,10 @@ void Solver::solve(const string &file_name) {
 		// 	statistics_.set_final_solution_count_projected(
         // stack_.top().getTotalModelCount() * comp_manager_.get_saved_partial_sol());
 		// FIXED: independent support don't need to be multiplied
-			statistics_.set_final_solution_count_projected(
-				stack_.top().getTotalModelCount());
+		statistics_.set_final_solution_count_projected(
+			stack_.top().getTotalModelCount());
+		// statistics_.set_final_solution_count_projected(
+		// 	0.0);
     } else {
 		// cout << "Debug: seft_final_solution_count_projected: "
 		//  << stack_.top().getTotalModelCount()
@@ -245,8 +247,10 @@ void Solver::solve(const string &file_name) {
 		// FIXED: independent support don't need to be multiplied
 		// 	statistics_.set_final_solution_count(
         // stack_.top().getTotalModelCount() * comp_manager_.get_saved_partial_sol());
-			statistics_.set_final_solution_count(
-        stack_.top().getTotalModelCount());
+		statistics_.set_final_solution_count(
+			stack_.top().getTotalModelCount());
+		// statistics_.set_final_solution_count(
+		// 	0.0);
     }
 		statistics_.num_long_conflict_clauses_ = num_conflict_clauses();
 
