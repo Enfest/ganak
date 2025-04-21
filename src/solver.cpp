@@ -557,6 +557,7 @@ void Solver::decideLiteral() {
 	// cout << "Deciding on: " << theLit.toInt() << " with sign " << theLit.sign() << " " << max_score_level << endl;
 	stack_.top().setbranchvariable(max_score_var);
 	stack_.top().setExist(isExist[max_score_var]);
+	cout << "decide literal: " << max_score_var << " exist: " << isExist[max_score_var] << endl;
 
 	setLiteralIfFree(theLit);
 	statistics_.num_decisions_++;

@@ -171,8 +171,9 @@ void Instance::compactVariables() {
   variables_.clear();
   isExist.clear();
   variables_.push_back(Variable());
+  isExist.push_back(false);
   for (int i = 1; i <= last_ofs; i++) {
-    cout << "map: " << rev_map[i] << " -> " << variables_.size() << endl;;
+    cout << "map: " << rev_map[i] << " -> " << variables_.size() << " : " << isExist[rev_map[i]] << endl;;
     variables_.push_back(temp_variables[rev_map[i]]); 
     isExist.push_back(isExist[rev_map[i]]);
   }
