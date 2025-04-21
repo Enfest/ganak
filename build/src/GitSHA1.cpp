@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 const char* Ganak::get_version_sha1()
 {
-    static const char myversion_sha1[] = "741861677938b720579cb9c2c02685c12b1694e3";
+    static const char myversion_sha1[] = "53080765f8af5d856a52f4c5c4272b7a37da4d9b";
     return myversion_sha1;
 }
 
